@@ -6,6 +6,10 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/dh-user/pom.xml" />
+        <option value="$PROJECT_DIR$/dh-email/pom.xml" />
+        <option value="$PROJECT_DIR$/dh-product/pom.xml" />
+        <option value="$PROJECT_DIR$/dh-brand/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
       </list>
     </option>
   </component>

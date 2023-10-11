@@ -6,17 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="dh-product" />
+        <module name="dh-email" />
         <module name="dh-user" />
+        <module name="dh-brand" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="dh-brand" target="8" />
-      <module name="dh-email" target="8" />
-      <module name="dh-product" target="8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dh-brand" options="-parameters" />
+      <module name="dh-email" options="-parameters" />
+      <module name="dh-product" options="-parameters" />
       <module name="dh-user" options="-parameters" />
     </option>
   </component>

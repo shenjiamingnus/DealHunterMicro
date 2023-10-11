@@ -14,6 +14,7 @@
     <module>dh-email</module>
     <module>dh-brand</module>
     <module>dh-product</module>
+    <module>dh-gateway</module>
   </modules>
 
 </project>
