@@ -15,6 +15,7 @@
     <module>dh-brand</module>
     <module>dh-product</module>
     <module>dh-gateway</module>
+    <module>dh-common</module>
   </modules>
 
 </project>
