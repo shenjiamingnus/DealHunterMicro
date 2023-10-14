@@ -7,16 +7,20 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="dh-product" />
+        <module name="dh-common" />
         <module name="dh-email" />
         <module name="dh-user" />
         <module name="dh-brand" />
+        <module name="dh-gateway" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="dh-brand" options="-parameters" />
+      <module name="dh-common" options="-parameters" />
       <module name="dh-email" options="-parameters" />
+      <module name="dh-gateway" options="-parameters" />
       <module name="dh-product" options="-parameters" />
       <module name="dh-user" options="-parameters" />
     </option>

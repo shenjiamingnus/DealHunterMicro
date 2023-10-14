@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/dh-product/pom.xml" />
         <option value="$PROJECT_DIR$/dh-brand/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/common/pom.xml" />
       </list>
     </option>
   </component>
