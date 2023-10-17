@@ -44,10 +44,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
         // 主页接口、图书接口正则匹配
 //        boolean indexMatch = Pattern.matches("/index[^\\s]*", path);
-        boolean bookMatch = Pattern.matches("/api/user/[^\\s]*", path);
+//        boolean bookMatch = Pattern.matches("/api/user/[^\\s]*", path);
 
         // 白名单接口、开放接口放行
-        if (bookMatch || whiteList.contains(path)) {
+//        if (bookMatch || whiteList.contains(path)) {
+        if (whiteList.contains(path)) {
             return chain.filter(exchange);
         }
 
