@@ -16,6 +16,7 @@
     <module>dh-product</module>
     <module>dh-gateway</module>
     <module>dh-common</module>
+    <module>dh-model</module>
   </modules>
 
 </project>

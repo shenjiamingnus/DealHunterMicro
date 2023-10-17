@@ -39,4 +39,6 @@ knife4j:
       excluded-services:
         - dh-gateway
 
-
+system:
+  properties:
+    whitelist: api/user/v3/api-docs/default

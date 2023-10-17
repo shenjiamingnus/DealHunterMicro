@@ -2,16 +2,18 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="dh-gateway" />
         <module name="dh-product" />
         <module name="dh-common" />
         <module name="dh-email" />
+        <module name="dh-model" />
         <module name="dh-user" />
         <module name="dh-brand" />
-        <module name="dh-gateway" />
       </profile>
     </annotationProcessing>
   </component>
