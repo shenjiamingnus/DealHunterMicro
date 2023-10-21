@@ -115,7 +115,6 @@
       <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
       <version>4.3.0</version>
     </dependency>
-
   </dependencies>
 
   <dependencyManagement>
@@ -136,14 +135,5 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>
