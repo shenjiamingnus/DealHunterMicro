@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-service.dealhunter:8848
+
+  application:
+    name: dh-brand
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  address: 0.0.0.0
+  port: 8080
+  servlet:
+    context-path: /api/brand
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    show-extensions: true
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+  default-flat-param-object: false

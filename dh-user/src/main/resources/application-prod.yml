@@ -1,0 +1,67 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-service.dealhunter:8848
+
+  application:
+    name: dh-user
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:mysql://dh-user-mysql-service:3306/dh-user?allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: wodemima
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      ddl-auto: update
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+
+server:
+  address: 0.0.0.0
+  port: 8104
+  servlet:
+    context-path: /api/user
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    show-extensions: true
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+  default-flat-param-object: false
+
+
+app:
+  jwtSecret: makabaka8su12qrerdig0q29ewrfsiohpdofiuv0q208eithowaihjsopfijbv01weijfropeoaisjdiofja23461wefsdfg2oijsiodfjbao
+  jwtExpirationInMs: 604800000
+
+auth:
+  jwt:
+    enabled: true   # 是否开启JWT登录认证功能
+    secret: passjava  # JWT 私钥，用于校验JWT令牌的合法性
+    expiration: 3600000 # JWT 令牌的有效期，用于校验JWT令牌的合法性，一个小时
+    header: Authorization # HTTP 请求的 Header 名称，该 Header作为参数传递 JWT 令牌
+    userParamName: userId  # 用户登录认证用户名参数名称
+    pwdParamName: password  # 用户登录认证密码参数名称
+    useDefaultController: true # 是否使用默认的JwtAuthController
+    skipValidUrl: /api/user/login

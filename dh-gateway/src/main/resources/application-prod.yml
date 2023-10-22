@@ -1,0 +1,44 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-service.dealhunter:8848
+    gateway:
+      routes:
+        - id: dh-brand
+          uri: lb://dh-brand
+          predicates:
+            - Path=/api/brand/**
+        - id: dh-user
+          uri: lb://dh-user
+          predicates:
+            - Path=/api/user/**
+        - id: dh-product
+          uri: lb://dh-product
+          predicates:
+            - Path=/api/product/**
+  application:
+    name: dh-gateway
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8080
+
+knife4j:
+  gateway:
+    # ① 第一个配置，开启gateway聚合组件
+    enabled: true
+    # ② 第二行配置，设置聚合模式采用discover服务发现的模式
+    strategy: discover
+    discover:
+      # ③ 第三行配置，开启discover模式
+      enabled: true
+      # ④ 第四行配置，聚合子服务全部为Swagger2规范的文档
+      version: openapi3
+      excluded-services:
+        - dh-gateway
+
+system:
+  properties:
+    whitelist: /api/user/v3/api-docs/default,/api/user/login,/api/user/signup,/v3/api-docs/default
