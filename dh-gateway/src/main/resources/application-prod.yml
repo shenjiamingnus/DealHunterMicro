@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 167.172.71.33:30129
+        server-addr: nacos-service.dealhunter:8848
     gateway:
       routes:
         - id: dh-brand
@@ -23,7 +23,7 @@ spring:
     web-application-type: reactive
 
 server:
-  port: 8081
+  port: 8080
 
 knife4j:
   gateway:

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class GatewayApplication  {
 
   public static void main(String[] args) {
-    System.out.println("aaaaaa");
     SpringApplication.run(GatewayApplication.class, args);
   }
 }
