@@ -11,7 +11,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIAL_ID = 'docker-id'
-        GITHUB_CREDENTIAL_ID = 'github-up'
+        GITHUB_CREDENTIAL_ID = 'github-id'
         KUBECONFIG_CREDENTIAL_ID = 'kubeconfig'
         REGISTRY = 'docker.io'
         DOCKERHUB_NAMESPACE = 'nandonus'
@@ -26,66 +26,80 @@ pipeline {
             }
         }
 
-        stage ('unit test') {
-            steps {
-                container ('maven') {
-                    sh 'mvn clean -o -gs `pwd`/configuration/settings.xml test'
-                }
-            }
-        }
+//         stage ('unit test') {
+//             steps {
+//                 container ('maven') {
+//                     sh 'mvn clean test'
+//                 }
+//             }
+//         }
 
-        stage ('build & push') {
-            steps {
-                container ('maven') {
-                    sh 'mvn -o -Dmaven.test.skip=true -gs `pwd`/configuration/settings.xml clean package'
-                    sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
-                    withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
-                    }
-                }
-            }
-        }
-
-        stage('push latest'){
-           when{
-             branch 'master'
-           }
-           steps{
-                container ('maven') {
-                  sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-                  sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-                }
-           }
-        }
+//         stage ('build & push') {
+//             steps {
+//                 container ('maven') {
+//                     sh 'mvn clean package -DskipTests'
+//                     sh 'cd dh-brand && podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER .'
+// //                     sh 'podman build -f dh-email/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER .'
+// //                     sh 'podman build -f dh-product/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER .'
+//                     sh 'cd dh-gateway && podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER .'
+//                     sh 'cd dh-user && podman build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER .'
+//                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+//
+//                         sh 'echo "$DOCKER_PASSWORD" | podman login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+//                         sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER'
+// //                         sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER'
+// //                         sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER'
+//                         sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER'
+//                         sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER'
+//                     }
+//                 }
+//             }
+//         }
+//
+//         stage('push latest'){
+//            when{
+//              branch 'main'
+//            }
+//            steps{
+//                 container ('maven') {
+//                   sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+// //                   sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+// //                   sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+//                   sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+//                   sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+//                   sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+// //                   sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+// //                   sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+//                   sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+//                   sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+//                 }
+//            }
+//         }
 
         stage('deploy to dev') {
           when{
-            branch 'master'
+            branch 'main'
           }
           steps {
-            input(id: 'deploy-to-dev', message: 'deploy to dev?')
-            kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-          }
-        }
-        stage('push with tag'){
-          when{
-            expression{
-              return params.TAG_NAME =~ /v.*/
+            container ('maven') {
+              withCredentials([
+                kubeconfigFile(
+                credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
+                variable: 'KUBECONFIG')
+                ]) {
+                sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+                sh 'envsubst < dh-gateway/deploy/dh-gateway-deploy.yaml | kubectl apply -f -'
+                sh 'envsubst < dh-user/deploy/dh-user-deploy.yaml | kubectl apply -f -'
+//                 sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+//                 sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+              }
             }
-          }
-          steps {
-              container ('maven') {
-                input(id: 'release-image-with-tag', message: 'release image with tag?')
-                  withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh 'git config --global user.email "kubesphere@yunify.com" '
-                    sh 'git config --global user.name "kubesphere" '
-                    sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
-                    sh 'git push http://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/springboot-sample.git --tags'
-                  }
-                sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
-                sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
-          }
+//             input(id: 'deploy-to-dev', message: 'deploy to dev?')
+//             kubernetesDeploy(configs: 'dh-brand/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-email/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-product/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-gateway/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-user/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
         }
     }

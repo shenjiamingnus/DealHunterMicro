@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos-service.dealhunter:8848
+
+server:
+  address: 0.0.0.0
+  port: 8080
+  servlet:
+    context-path: /api/email
+
+  application:
+    name: dh-email
+
+
