@@ -23,7 +23,7 @@ spring:
     web-application-type: reactive
 
 server:
-  port: 8080
+  port: 8081
 
 knife4j:
   gateway:
