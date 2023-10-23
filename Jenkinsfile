@@ -81,12 +81,25 @@ pipeline {
             branch 'main'
           }
           steps {
+            container ('maven') {
+              withCredentials([
+                kubeconfigFile(
+                credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
+                variable: 'KUBECONFIG')
+                ]) {
+                sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+                sh 'envsubst < dh-gateway/deploy/dh-gateway-deploy.yaml | kubectl apply -f -'
+                sh 'envsubst < dh-user/deploy/dh-user-deploy.yaml | kubectl apply -f -'
+//                 sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+//                 sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
+              }
+            }
 //             input(id: 'deploy-to-dev', message: 'deploy to dev?')
-            kubernetesDeploy(configs: 'dh-brand/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-brand/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
 //             kubernetesDeploy(configs: 'dh-email/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
 //             kubernetesDeploy(configs: 'dh-product/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-            kubernetesDeploy(configs: 'dh-gateway/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-            kubernetesDeploy(configs: 'dh-user/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-gateway/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//             kubernetesDeploy(configs: 'dh-user/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
         }
     }
