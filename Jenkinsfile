@@ -35,10 +35,9 @@ pipeline {
 //         }
 
         stage ('build & push') {
-            agent none
             steps {
                 container ('maven') {
-                    sh 'mvn -Dmaven.test.skip=true clean package'
+                    sh 'mvn -Dmaven.test.skip=true -gs `pwd`/mvn-settings.xml clean package'
                     sh 'docker build -f dh-brand/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER .'
 //                     sh 'docker build -f dh-email/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER .'
 //                     sh 'docker build -f dh-product/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER .'
