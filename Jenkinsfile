@@ -62,16 +62,16 @@ pipeline {
            }
            steps{
                 container ('maven') {
-                  sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+//                   sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
 //                   sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
 //                   sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                  sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                  sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
-                  sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+//                   sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
 //                   sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
 //                   sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                  sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                  sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
                 }
            }
         }
