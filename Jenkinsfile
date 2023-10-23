@@ -37,6 +37,7 @@ pipeline {
         stage ('build & push') {
             steps {
                 container ('maven') {
+                    sh 'source /etc/profile'
                     sh 'mvn clean package -DskipTests'
                     sh 'docker build -f dh-brand/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER .'
 //                     sh 'docker build -f dh-email/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER .'
