@@ -37,20 +37,19 @@ pipeline {
         stage ('build & push') {
             steps {
                 container ('maven') {
-                    sh 'source /etc/profile'
                     sh 'mvn clean package -DskipTests'
-                    sh 'docker build -f dh-brand/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER .'
+                    sh 'podman build -f dh-brand/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER .'
 //                     sh 'docker build -f dh-email/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER .'
 //                     sh 'docker build -f dh-product/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER .'
-                    sh 'docker build -f dh-gateway/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER .'
-                    sh 'docker build -f dh-user/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER .'
+                    sh 'podman build -f dh-gateway/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER .'
+                    sh 'podman build -f dh-user/Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER'
+                        sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER'
 //                         sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER'
 //                         sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER'
-                        sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER'
-                        sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER'
+                        sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER'
+                        sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER'
                     }
                 }
             }
