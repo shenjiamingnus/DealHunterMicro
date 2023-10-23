@@ -2,8 +2,8 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: nacos-service.dealhunter:8848
+        server-addr: 167.172.71.33:30129
       discovery:
-        server-addr: nacos-service.dealhunter:8848
+        server-addr: 167.172.71.33:30129
   application:
     name: dh-gateway
