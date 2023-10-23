@@ -1,5 +1,8 @@
 spring:
   cloud:
+    nacos:
+      discovery:
+        server-addr: 167.172.71.33:30129
     gateway:
       routes:
         - id: dh-brand

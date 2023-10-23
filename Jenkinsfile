@@ -5,10 +5,6 @@ pipeline {
     }
   }
 
-    parameters {
-        string(name:'TAG_NAME',defaultValue: '',description:'')
-    }
-
     environment {
         DOCKER_CREDENTIAL_ID = 'docker-id'
         GITHUB_CREDENTIAL_ID = 'github-id'
