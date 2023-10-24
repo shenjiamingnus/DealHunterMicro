@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: dh-brand
-          image: $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:$BUILD_NUMBER
           ports:
             - containerPort: 8080
               protocol: TCP
