@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: dh-email
-          image: $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:$BUILD_NUMBER
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER
           ports:
             - containerPort: 8080
               protocol: TCP
