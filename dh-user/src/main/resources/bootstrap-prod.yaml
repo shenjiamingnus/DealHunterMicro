@@ -1,9 +1,0 @@
-spring:
-  cloud:
-    nacos:
-      config:
-        server-addr: nacos-service.dealhunter:8848
-      discovery:
-        server-addr: nacos-service.dealhunter:8848
-  application:
-    name: dh-user
