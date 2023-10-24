@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      config:
+      discovery:
         server-addr: nacos-service.dealhunter:8848
 
 server:

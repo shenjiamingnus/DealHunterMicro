@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      config:
+      discovery:
         server-addr: nacos-service.dealhunter:8848
 
   application:
@@ -15,7 +15,7 @@ spring:
     init:
       mode: always
   datasource:
-    url: jdbc:mysql://dh-user-mysql-service:3306/dh-user?allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://dh-user-mysql-service.dealhunter:3306/dh-user?allowMultiQueries=true&serverTimezone=UTC
     username: root
     password: wodemima
   jpa:
@@ -33,7 +33,7 @@ spring:
 
 server:
   address: 0.0.0.0
-  port: 8104
+  port: 8080
   servlet:
     context-path: /api/user
 
