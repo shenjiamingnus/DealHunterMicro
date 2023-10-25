@@ -3,7 +3,9 @@ package com.nus.dhmodel.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
