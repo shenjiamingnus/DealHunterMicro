@@ -1,10 +1,9 @@
 package com.nus.dhbrand.controller;
-import com.nus.dhbrand.model.Brand;
-
+import com.nus.dhmodel.pojo.Brand;
 import com.nus.dhbrand.payload.request.CreateBrandRequest;
+import com.nus.dhbrand.payload.request.ModifyBrandRequest;
 import com.nus.dhbrand.payload.response.GeneralApiResponse;
 import com.nus.dhbrand.service.BrandService;
-import com.nus.dhbrand.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,7 @@ public class BrandController {
     private BrandService brandService;
 
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+
 
     @GetMapping
     public List<Brand> getAllBrands() {
@@ -36,6 +34,16 @@ public class BrandController {
             return ResponseEntity.ok(new GeneralApiResponse(true,"Brand created!"));
         }else {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to created"));
+        }
+
+    }
+    @PutMapping
+    public ResponseEntity<GeneralApiResponse> modifyBrand(@RequestBody ModifyBrandRequest modifyBrandRequest){
+        Brand modifiedBrand = brandService.modifyBrand(modifyBrandRequest);
+        if(modifiedBrand != null){
+            return ResponseEntity.ok(new GeneralApiResponse(true,"Brand modified!"));
+        }else {
+            return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to modify"));
         }
 
     }
