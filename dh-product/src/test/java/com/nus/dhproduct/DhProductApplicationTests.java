@@ -1,4 +1,4 @@
-package com.nuns.dhproduct;
+package com.nus.dhproduct;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
