@@ -32,29 +32,26 @@ public class BrandService {
 
     }
 
-
-public Brand createBrand(CreateBrandRequest createBrandRequest){
-    if (createBrandRequest == null) {
-        return null;
-    }
-    Brand brand = new Brand();
-    brand.setBrandname(createBrandRequest.getBrandname());
-    brand.setDescription(createBrandRequest.getDescription());
-    brand.setImageUrl(createBrandRequest.getImageUrl());
-    brand.setCreateDate(Instant.now());
-    return brandRepository.save(brand);
-}
-
-public  Brand modifyBrand(ModifyBrandRequest modifyBrandRequest){
+    public Brand createBrand(CreateBrandRequest createBrandRequest){
+        if (createBrandRequest == null) {
+            return null;
+        }
         Brand brand = new Brand();
-        brand.setId(modifyBrandRequest.getId());
-        brand.setBrandname(modifyBrandRequest.getBrandname());
-        brand.setDescription(modifyBrandRequest.getDescription());
+        brand.setBrandname(createBrandRequest.getBrandname());
+        brand.setDescription(createBrandRequest.getDescription());
+        brand.setImageUrl(createBrandRequest.getImageUrl());
         brand.setCreateDate(Instant.now());
         return brandRepository.save(brand);
-}
+    }
 
-
+    public  Brand modifyBrand(ModifyBrandRequest modifyBrandRequest){
+            Brand brand = new Brand();
+            brand.setId(modifyBrandRequest.getId());
+            brand.setBrandname(modifyBrandRequest.getBrandname());
+            brand.setDescription(modifyBrandRequest.getDescription());
+            brand.setCreateDate(Instant.now());
+            return brandRepository.save(brand);
+    }
 
     public void deleteBrand(Long id) {
         try {

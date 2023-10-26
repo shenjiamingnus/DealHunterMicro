@@ -4,23 +4,18 @@ import com.nus.dhbrand.payload.request.CreateBrandRequest;
 import com.nus.dhbrand.payload.request.ModifyBrandRequest;
 import com.nus.dhbrand.payload.response.GeneralApiResponse;
 import com.nus.dhbrand.service.BrandService;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("Brand/")
 @RestController
 @RequestMapping("/api/brands")
 
 public class BrandController {
     @Autowired
     private BrandService brandService;
-
-
-
 
     @GetMapping
     public List<Brand> getAllBrands() {
@@ -45,7 +40,6 @@ public class BrandController {
         }else {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to modify"));
         }
-
     }
 
 
