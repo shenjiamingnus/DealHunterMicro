@@ -11,6 +11,26 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:mysql://dh-brand-mysql-service.dealhunter:3306/dh-user?allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: wodemima
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      ddl-auto: update
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+
 server:
   address: 0.0.0.0
   port: 8080

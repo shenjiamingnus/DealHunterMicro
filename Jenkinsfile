@@ -31,6 +31,9 @@ pipeline {
 //         }
 
         stage ('build & push') {
+             when{
+               branch 'main'
+             }
             steps {
                 container ('maven') {
                     sh 'mvn clean package -DskipTests'
