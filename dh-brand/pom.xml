@@ -29,7 +29,6 @@
       <artifactId>dh-model</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -43,11 +42,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>1.5.20</version>
     </dependency>
 
 
@@ -74,59 +68,6 @@
 <!--      <artifactId>swagger-models</artifactId>-->
 <!--      <version>1.5.21</version>-->
 <!--    </dependency>-->
-
-    <!--fastjson-->
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>1.2.75</version>
-    </dependency>
-
-    <!-- swagger -->
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-boot-starter</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.26</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.minio</groupId>
-      <artifactId>minio</artifactId>
-      <version>8.4.2</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-<!--    &lt;!&ndash;mybatis&ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>com.baomidou</groupId>-->
-<!--      <artifactId>mybatis-plus-boot-starter</artifactId>-->
-<!--      <version>3.4.3</version>-->
-<!--    </dependency>-->
-
-
 
   </dependencies>
   <dependencyManagement>

@@ -1,0 +1,11 @@
+
+~
+java:S1319+"cThe type of "params" should be an interface such as "Map" rather than the implementation "HashMap".(ÍÂÜ´ıÿÿÿÿ
+M
+java:S2589I"7Remove this expression which always evaluates to "true"(»ëÔ
+M
+java:S2589"7Remove this expression which always evaluates to "true"(»ëÔ
+M
+java:S2589!"7Remove this expression which always evaluates to "true"(»ëÔ
+U
+java:S1118":Add a private constructor to hide the implicit public one.(ë¢ñãûÿÿÿÿ
