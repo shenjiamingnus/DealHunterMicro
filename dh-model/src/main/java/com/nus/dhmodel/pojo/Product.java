@@ -37,7 +37,6 @@ public class Product {
     @Size(max = 50)
     private String brandname;
 
-
     private String storeAddress;
 
     private String description;
@@ -120,39 +119,6 @@ public class Product {
 
     public Product(Long productId) {
         this.id =productId;
-    }
-
-    public void setProductname(String productname) {
-        this.productname = productname;
-    }
-
-    public void setStoreAddress(String storeAddress) {
-        this.storeAddress = storeAddress;
-    }
-
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setCurrentPrice(double currentprice) {
-        this.currentPrice = currentprice;
-    }
-
-    public double getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setLowestPrice(double lowestPrice) {
-        this.lowestPrice = lowestPrice;
-    }
-
-    public double getLowestPrice() {
-        return lowestPrice;
     }
 
     public void addWatcher(User user) {

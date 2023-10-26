@@ -31,13 +31,6 @@ public class PriceHistory {
     private Product product;
 
 
-//    public PriceHistory(double price, LocalDate date, Product product) {
-//        this.price = price;
-//        this.date = date;
-//        this.product = product;
-//    }
-
-
     public PriceHistory(Long id, double price, Instant createDate, Product product) {
 
         this.id = id;

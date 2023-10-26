@@ -41,10 +41,8 @@ public class Brand {
     @CreatedDate
     private Instant createDate;
 
-
     @OneToMany(mappedBy = "brand")
     @JsonIgnore
-
     private List<Product> products;
 
 
@@ -66,30 +64,6 @@ public class Brand {
     }
 
     public Brand(){}
-
-    public String getBrandname() {
-        return brandname;
-    }
-
-    public void setBrandname(String brandname){
-        this.brandname = brandname;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
 
 
