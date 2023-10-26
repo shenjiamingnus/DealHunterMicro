@@ -2,19 +2,7 @@ package com.nus.dhmodel.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<<<<<<< HEAD
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.util.List;
-=======
 import java.time.Instant;
 import java.util.List;
 import javax.persistence.Entity;
@@ -28,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
->>>>>>> main
+
 
 
 @Data
@@ -56,21 +44,16 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     @JsonIgnore
-<<<<<<< HEAD
+
     private List<Product> products;
-=======
-    private List<com.nus.dealhunter.model.Product> products;
->>>>>>> main
+
 
     public Brand(String brandname) {
         this.brandname = brandname;
     }
 
-<<<<<<< HEAD
+
     public Brand(Long id, String brandname){
-=======
-    public Brand(Long id,String brandname){
->>>>>>> main
         this.id = id;
         this.brandname = brandname;
     }
