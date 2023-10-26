@@ -4,13 +4,36 @@ spring:
       discovery:
         server-addr: nacos-service.dealhunter:8848
 
+  application:
+    name: dh-email
+
+  rabbitmq:
+    host: rabbitmq-service.dealhunter
+    port: 5672
+    username: admin
+    password: password
+  mail:
+    protocol: smtp
+    host: smtp.qq.com
+    port: 587
+    username: 619176497@qq.com
+    password: kapszwskksusbdde
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttles:
+            enable: true
+
 server:
   address: 0.0.0.0
   port: 8080
   servlet:
     context-path: /api/email
 
-  application:
-    name: dh-email
+queue:
+  name: email
+
+
 
 

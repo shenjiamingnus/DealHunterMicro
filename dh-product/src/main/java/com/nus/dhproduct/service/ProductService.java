@@ -1,15 +1,13 @@
 package com.nus.dhproduct.service;
 
-import com.nus.dealhunter.exception.ProductServiceException;
-import com.nus.dealhunter.model.Brand;
-import com.nus.dealhunter.model.PriceHistory;
-import com.nus.dealhunter.model.Product;
-import com.nus.dealhunter.model.User;
-import com.nus.dealhunter.payload.request.CreateProductRequest;
-import com.nus.dealhunter.payload.request.UpdateProductRequest;
-import com.nus.dealhunter.repository.PriceHistoryRepository;
-import com.nus.dealhunter.repository.ProductRepository;
-import com.nus.dealhunter.repository.UserRepository;
+import com.nus.dhmodel.pojo.Brand;
+import com.nus.dhmodel.pojo.PriceHistory;
+import com.nus.dhmodel.pojo.Product;
+import com.nus.dhproduct.exception.ProductServiceException;
+import com.nus.dhproduct.payload.request.CreateProductRequest;
+import com.nus.dhproduct.payload.request.UpdateProductRequest;
+import com.nus.dhproduct.repository.PriceHistoryRepository;
+import com.nus.dhproduct.repository.ProductRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +18,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-    @Autowired
-    private UserRepository userRepository;
+// TODO
+//    @Autowired
+//    private UserRepository userRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -29,11 +28,12 @@ public class ProductService {
     @Autowired
     private PriceHistoryRepository priceHistoryRepository;
 
-    @Autowired
-    private EmailService emailService;
+// TODO
+//    @Autowired
+//    private EmailService emailService;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
 
 
     public Boolean checkProductNameExists(String productname) {
@@ -225,72 +225,72 @@ public class ProductService {
         }
     }
 
-    public void addUserWatchesProduct(Long userId, Long productId) {
-        try {
-            Optional<User> optionalUser = userRepository.findById(userId);
-            Optional<Product> optionalProduct = productRepository.findById(productId);
-
-            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-                User user = optionalUser.get();
-                Product product = optionalProduct.get();
-
-                // 添加产品到用户的关注列表
-//                ProductSubject productSubject = new ProductSubject(product.getId());
-//                UserObserver userObserver = new UserObserver(user.getId(),product.getId());
-//                productSubject.addUserObserver(userObserver);
-//                userObserverRepository.save(userObserver);
-
-                user.addWatchedProduct(product);
-                userRepository.save(user);
-                product.addWatcher(user);
-                productRepository.save(product);
-            } else {
-                // 处理用户或产品不存在的情况
-                throw new ProductServiceException("User or Product not found");
-            }
-        } catch (Exception e) {
-            throw new ProductServiceException("Failed to add user to product watchers", e);
-        }
-    }
-
-    public void removeUserWatchesProduct(Long userId, Long productId) {
-        try {
-            Optional<User> optionalUser = userRepository.findById(userId);
-            Optional<Product> optionalProduct = productRepository.findById(productId);
-
-            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-                User user = optionalUser.get();
-                Product product = optionalProduct.get();
-
-                // 从产品的关注列表中移除用户
-                product.removeWatcher(user);
-                productRepository.save(product);
-
-                user.removeWatchedProduct(product);
-                userRepository.save(user);
-
-            } else {
-                throw new ProductServiceException("User or Product not found");
-            }
-        } catch (Exception e) {
-            throw new ProductServiceException("Failed to remove user from product watchers", e);
-        }
-    }
-
-    public boolean isUserWatchingProduct(Long userId, Long productId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-
-        if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-            User user = optionalUser.get();
-            Product product = optionalProduct.get();
-
-            // 检查用户是否在产品的关注列表中
-            return user.getWatchedProducts().contains(product);
-        } else {
-            throw new ProductServiceException("User or Product not found");
-        }
-    }
+//    public void addUserWatchesProduct(Long userId, Long productId) {
+//        try {
+//            Optional<User> optionalUser = userRepository.findById(userId);
+//            Optional<Product> optionalProduct = productRepository.findById(productId);
+//
+//            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
+//                User user = optionalUser.get();
+//                Product product = optionalProduct.get();
+//
+//                // 添加产品到用户的关注列表
+////                ProductSubject productSubject = new ProductSubject(product.getId());
+////                UserObserver userObserver = new UserObserver(user.getId(),product.getId());
+////                productSubject.addUserObserver(userObserver);
+////                userObserverRepository.save(userObserver);
+//
+//                user.addWatchedProduct(product);
+//                userRepository.save(user);
+//                product.addWatcher(user);
+//                productRepository.save(product);
+//            } else {
+//                // 处理用户或产品不存在的情况
+//                throw new ProductServiceException("User or Product not found");
+//            }
+//        } catch (Exception e) {
+//            throw new ProductServiceException("Failed to add user to product watchers", e);
+//        }
+//    }
+//
+//    public void removeUserWatchesProduct(Long userId, Long productId) {
+//        try {
+//            Optional<User> optionalUser = userRepository.findById(userId);
+//            Optional<Product> optionalProduct = productRepository.findById(productId);
+//
+//            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
+//                User user = optionalUser.get();
+//                Product product = optionalProduct.get();
+//
+//                // 从产品的关注列表中移除用户
+//                product.removeWatcher(user);
+//                productRepository.save(product);
+//
+//                user.removeWatchedProduct(product);
+//                userRepository.save(user);
+//
+//            } else {
+//                throw new ProductServiceException("User or Product not found");
+//            }
+//        } catch (Exception e) {
+//            throw new ProductServiceException("Failed to remove user from product watchers", e);
+//        }
+//    }
+//
+//    public boolean isUserWatchingProduct(Long userId, Long productId) {
+//        Optional<User> optionalUser = userRepository.findById(userId);
+//        Optional<Product> optionalProduct = productRepository.findById(productId);
+//
+//        if (optionalUser.isPresent() && optionalProduct.isPresent()) {
+//            User user = optionalUser.get();
+//            Product product = optionalProduct.get();
+//
+//            // 检查用户是否在产品的关注列表中
+//            return user.getWatchedProducts().contains(product);
+//        } else {
+//            throw new ProductServiceException("User or Product not found");
+//        }
+//    }
 
 //    //发送价格更新邮件给关注了产品的用户
 //    public void sendLowestPriceUpdateEmails(Product product, double newLowestPrice) {

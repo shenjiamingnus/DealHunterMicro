@@ -1,7 +1,7 @@
 package com.nus.dhproduct.repository;
 
 
-import com.nus.dealhunter.model.PriceHistory;
+import com.nus.dhmodel.pojo.PriceHistory;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

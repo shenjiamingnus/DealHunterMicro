@@ -7,4 +7,25 @@ spring:
   application:
     name: dh-email
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  mail:
+    protocol: smtp
+    host: smtp.qq.com
+    port: 587
+    username: 619176497@qq.com
+    password: kapszwskksusbdde
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttles:
+            enable: true
+
+queue:
+  name: email
+
 

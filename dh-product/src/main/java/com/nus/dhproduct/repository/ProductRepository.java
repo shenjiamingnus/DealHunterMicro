@@ -20,8 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 //    Optional<Product> findByProductnameAndBrandname(String productname, String brandname);
 
-    // 自定义方法，查找关注了特定商品的用户
-    @Query("SELECT u FROM User u JOIN u.watchedProducts p WHERE p = :product")
-    Set<User> findUsersWatchingProduct(@Param("product") Product product);
+//    // 自定义方法，查找关注了特定商品的用户
+//    @Query("SELECT u FROM User u JOIN u.watchedProducts p WHERE p = :product")
+//    Set<User> findUsersWatchingProduct(@Param("product") Product product);
 
 }

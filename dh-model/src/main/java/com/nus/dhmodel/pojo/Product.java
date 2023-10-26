@@ -1,8 +1,12 @@
 package com.nus.dhmodel.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
-
+@Getter
+@Setter
 @Entity
 @Table(name = "products", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"productname"})
@@ -60,11 +64,14 @@ public class Product {
 //    private Set<User> watchers = new HashSet<>();
 
 
+    @ManyToMany(mappedBy = "watchedProducts")
+    @JsonIgnore
+    private Set<User> watchers;
+
 
     public Product(String productname) {
         this.productname = productname;
     }
-
 
     public Product(String productname, String brandname) {
         this.productname = productname;
@@ -148,18 +155,19 @@ public class Product {
         return lowestPrice;
     }
 
+    public void addWatcher(User user) {
+        watchers.add(user);
+    }
 
+    public void removeWatcher(User user) {
+        watchers.remove(user);
+    }
 
-
-//    public void addWatcher(User user) {
-//        watchers.add(user);
-//    }
-//
-//    public void removeWatcher(User user) {
-//        watchers.remove(user);
-//    }
-
-
+    public void notify(double newPrice){
+        if (this.watchers == null) {
+            this.watchers = new HashSet<>(); // 创建一个空的 watchers 集合
+        }
+    }
 
     public Product() {}
 }
