@@ -19,9 +19,6 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
-
-
-
     @GetMapping
     public List<Brand> getAllBrands() {
         return brandService.getAllBrands();
@@ -45,7 +42,6 @@ public class BrandController {
         }else {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to modify"));
         }
-
     }
 
 
