@@ -16,10 +16,10 @@ spring:
     password: guest
   mail:
     protocol: smtp
-    host: smtp.gmail.com
+    host: smtp.qq.com
     port: 587
-    username: deal.hunter.platform@gmail.com
-    password: aihubrvcgrjlbzmv
+    username: 619176497@qq.com
+    password: kapszwskksusbdde
     properties:
       mail:
         smtp:
