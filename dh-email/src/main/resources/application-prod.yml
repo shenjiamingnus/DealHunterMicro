@@ -12,14 +12,14 @@ spring:
   rabbitmq:
     host: rabbitmq-service.dealhunter
     port: 5672
-    username: admin
-    password: password
+    username: guest
+    password: guest
   mail:
     protocol: smtp
-    host: smtp.qq.com
+    host: smtp.gmail.com
     port: 587
-    username: 619176497@qq.com
-    password: kapszwskksusbdde
+    username: deal.hunter.platform@gmail.com
+    password: aihubrvcgrjlbzmv
     properties:
       mail:
         smtp:
