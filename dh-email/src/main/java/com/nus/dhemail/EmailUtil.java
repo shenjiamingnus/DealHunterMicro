@@ -33,6 +33,8 @@ public class EmailUtil {
     MimeMessage mimeMessage = javaMailSender.createMimeMessage();
     MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage);
     try {
+      System.out.println(from);
+      System.out.println(emailContent.getEmail());
       mimeMessageHelper.setFrom(from);
       mimeMessageHelper.setTo(emailContent.getEmail());
       mimeMessageHelper.setSubject("LowestPrice Update for " + emailContent.getProductName());
