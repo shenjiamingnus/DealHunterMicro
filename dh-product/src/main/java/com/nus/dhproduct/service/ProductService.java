@@ -1,26 +1,29 @@
 package com.nus.dhproduct.service;
 
-import com.nus.dhmodel.pojo.Brand;
+import com.alibaba.nacos.common.utils.JacksonUtils;
+import com.nus.dhmodel.dto.EmailContent;
 import com.nus.dhmodel.pojo.PriceHistory;
 import com.nus.dhmodel.pojo.Product;
+import com.nus.dhmodel.pojo.User;
 import com.nus.dhproduct.exception.ProductServiceException;
+import com.nus.dhproduct.feign.UserFeignService;
 import com.nus.dhproduct.payload.request.CreateProductRequest;
 import com.nus.dhproduct.payload.request.UpdateProductRequest;
 import com.nus.dhproduct.repository.PriceHistoryRepository;
 import com.nus.dhproduct.repository.ProductRepository;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-
-// TODO
-//    @Autowired
-//    private UserRepository userRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -28,16 +31,17 @@ public class ProductService {
     @Autowired
     private PriceHistoryRepository priceHistoryRepository;
 
-// TODO
-//    @Autowired
-//    private EmailService emailService;
+    @Autowired
+    private UserFeignService userFeignService;
 
-//    @Autowired
-//    private JavaMailSender javaMailSender;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private Queue queue;
 
     public Boolean checkProductNameExists(String productname) {
-        return productRepository.existsByProductname(productname);
+        return productRepository.existsByProductName(productname);
     }
 
     public List<Product> getAllProducts(){
@@ -46,35 +50,31 @@ public class ProductService {
         }catch (Exception e){
             throw new ProductServiceException("Failed to retrieve all product ", e);
         }
-
     }
+
     public Optional<Product> getProductById(Long id) throws ProductServiceException {
         try {
             return productRepository.findById(id);
         }catch (Exception e){
             throw new ProductServiceException("Failed to retrieve product with ID: " + id, e);
         }
-
     }
-
 
     public List<Product> getProductByProductname(String productname) {
         try {
-            return productRepository.findByProductnameContaining(productname);
+            return productRepository.findByProductNameContaining(productname);
         }catch (Exception e){
             throw new ProductServiceException("Failed to retrieve product with productname: " + productname, e);
         }
     }
 
-
     public List<Product> getProductByBrandname(String brandname){
         try {
-            return productRepository.findByBrandname(brandname);
+            return productRepository.findByBrandName(brandname);
         }catch (Exception e){
             throw new ProductServiceException("Failed to retrieve product with Brandname: " + brandname, e);
         }
     }
-
 
     //when create a product, make LowestPrice = CurrentPrice
     public Product createProduct(CreateProductRequest createProductRequest){
@@ -82,40 +82,24 @@ public class ProductService {
             return null;
         }
         Product product = new Product();
-        product.setProductname(createProductRequest.getProductname());
-        product.setBrandname(createProductRequest.getBrandname());
+        product.setProductName(createProductRequest.getProductname());
+        product.setBrandName(createProductRequest.getBrandname());
         product.setStoreAddress(createProductRequest.getStoreAddress());
         product.setDescription(createProductRequest.getDescription());
         product.setImageUrl(createProductRequest.getImageUrl());
         product.setCurrentPrice(createProductRequest.getCurrentPrice());
         product.setLowestPrice(createProductRequest.getCurrentPrice());
+        product.setBrandId(createProductRequest.getBrand_id());
+        product.setWatcherUserId(new HashSet<>());
         product.setCreateDate(Instant.now());
-        //product.setBrand(new Brand(createProductRequest.getBrand_id(),createProductRequest.getBrandname()));
-        if (createProductRequest.getBrand_id() != null && createProductRequest.getBrandname() != null) {
-            product.setBrand(new Brand(createProductRequest.getBrand_id(), createProductRequest.getBrandname()));
-        }
         return productRepository.save(product);
     }
 
     public Product updateProduct(UpdateProductRequest updateProductRequest){
-        Product product = new Product();
-        product.setId(updateProductRequest.getProduct_id());
-        product.setProductname(updateProductRequest.getProductname());
-        product.setBrandname(updateProductRequest.getBrandname());
+        Product product = productRepository.findById(updateProductRequest.getProduct_id()).get();
+        product.setProductName(updateProductRequest.getProductname());
         product.setStoreAddress(updateProductRequest.getStoreAddress());
         product.setDescription(updateProductRequest.getDescription());
-        product.setImageUrl(updateProductRequest.getImageUrl());
-        product.setCurrentPrice(updateProductRequest.getCurrentPrice());
-        //如现价低于最低价，更新最低价
-        if(updateProductRequest.getCurrentPrice()<updateProductRequest.getLowestPrice()){
-            product.setLowestPrice(updateProductRequest.getCurrentPrice());
-            //sendLowestPriceUpdateEmails(product, updateProductRequest.getLowestPrice());
-        }else {
-            product.setLowestPrice(updateProductRequest.getLowestPrice());
-        }
-        product.setCreateDate(Instant.now());
-        product.setBrand(new Brand(updateProductRequest.getBrand_id(),updateProductRequest.getBrandname()));
-
         return productRepository.save(product);
     }
 
@@ -125,7 +109,6 @@ public class ProductService {
         }catch (Exception e){
             throw new ProductServiceException("Failed to delete product", e);
         }
-
     }
 
     public List<PriceHistory> getProductPriceHistory(Long productId) {
@@ -196,26 +179,15 @@ public class ProductService {
                 // 如果新价格低于历史最低价或历史最低价为0，更新历史最低价，并发送邮件
                 if (newPrice < product.getLowestPrice() || product.getLowestPrice() == 0) {
                     product.setLowestPrice(newPrice);
-                    product.notify(newPrice);
-//                    sendLowestPriceUpdateEmails(product, product.getLowestPrice());
+                    sendLowestPriceUpdateEmails(product, product.getLowestPrice());
                 }
 
-//                List<PriceHistory> priceHistoryList = product.getPriceHistoryList();
-//                if (priceHistoryList == null) {
-//                    priceHistoryList = new ArrayList<>();
-//                }
+                PriceHistory newPriceHistory = new PriceHistory();
+                newPriceHistory.setPrice(newPrice);
+                newPriceHistory.setProduct(product);
+                newPriceHistory.setCreateDate(Instant.now());
 
-                // 创建新的价格历史记录对象
-                PriceHistory newPriceHistory = new PriceHistory(newPrice, Instant.now(), product);
-
-//                //不需要 将新的价格历史记录添加到历史价格列表中
-//                priceHistoryList.add(newPriceHistory);
-
-
-                // 保存新的价格历史记录到数据库
                 priceHistoryRepository.save(newPriceHistory);
-
-                // 保存更新后的产品对象到数据库
                 return productRepository.save(product);
             } else {
                 throw new ProductServiceException("Product with productId " + productId + " not found");
@@ -225,93 +197,63 @@ public class ProductService {
         }
     }
 
-//    public void addUserWatchesProduct(Long userId, Long productId) {
-//        try {
-//            Optional<User> optionalUser = userRepository.findById(userId);
-//            Optional<Product> optionalProduct = productRepository.findById(productId);
-//
-//            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-//                User user = optionalUser.get();
-//                Product product = optionalProduct.get();
-//
-//                // 添加产品到用户的关注列表
-////                ProductSubject productSubject = new ProductSubject(product.getId());
-////                UserObserver userObserver = new UserObserver(user.getId(),product.getId());
-////                productSubject.addUserObserver(userObserver);
-////                userObserverRepository.save(userObserver);
-//
-//                user.addWatchedProduct(product);
-//                userRepository.save(user);
-//                product.addWatcher(user);
-//                productRepository.save(product);
-//            } else {
-//                // 处理用户或产品不存在的情况
-//                throw new ProductServiceException("User or Product not found");
-//            }
-//        } catch (Exception e) {
-//            throw new ProductServiceException("Failed to add user to product watchers", e);
-//        }
-//    }
-//
-//    public void removeUserWatchesProduct(Long userId, Long productId) {
-//        try {
-//            Optional<User> optionalUser = userRepository.findById(userId);
-//            Optional<Product> optionalProduct = productRepository.findById(productId);
-//
-//            if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-//                User user = optionalUser.get();
-//                Product product = optionalProduct.get();
-//
-//                // 从产品的关注列表中移除用户
-//                product.removeWatcher(user);
-//                productRepository.save(product);
-//
-//                user.removeWatchedProduct(product);
-//                userRepository.save(user);
-//
-//            } else {
-//                throw new ProductServiceException("User or Product not found");
-//            }
-//        } catch (Exception e) {
-//            throw new ProductServiceException("Failed to remove user from product watchers", e);
-//        }
-//    }
-//
-//    public boolean isUserWatchingProduct(Long userId, Long productId) {
-//        Optional<User> optionalUser = userRepository.findById(userId);
-//        Optional<Product> optionalProduct = productRepository.findById(productId);
-//
-//        if (optionalUser.isPresent() && optionalProduct.isPresent()) {
-//            User user = optionalUser.get();
-//            Product product = optionalProduct.get();
-//
-//            // 检查用户是否在产品的关注列表中
-//            return user.getWatchedProducts().contains(product);
-//        } else {
-//            throw new ProductServiceException("User or Product not found");
-//        }
-//    }
+    public void addUserWatchesProduct(Long userId, Long productId) {
+        try {
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                Set<Long> watcherUserId = product.getWatcherUserId();
+                watcherUserId.add(userId);
+                product.setWatcherUserId(watcherUserId);
+                productRepository.save(product);
+            } else {
+                throw new ProductServiceException("User or Product not found");
+            }
+        } catch (Exception e) {
+            throw new ProductServiceException("Failed to add user to product watchers", e);
+        }
+    }
 
-//    //发送价格更新邮件给关注了产品的用户
-//    public void sendLowestPriceUpdateEmails(Product product, double newLowestPrice) {
-//
-//        // 获取关注了该产品的用户列表
-//        Set<User> watchers = productRepository.findUsersWatchingProduct(product);
-//
-//        for (User user : watchers) {
-//            // 创建邮件内容
-//            SimpleMailMessage message = new SimpleMailMessage();
-////            message.setFrom("619176497@qq.com");
-//            message.setTo(user.getEmail());
-//            message.setSubject("LowestPrice Update for " + product.getProductname());
-//            message.setText("The newLowestPrice for " + product.getProductname() + " has been updated to " + newLowestPrice);
-//
-//            // 发送邮件
-//            javaMailSender.send(message);
-//        }
-//    }
+    public void removeUserWatchesProduct(Long userId, Long productId) {
+        try {
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                product.getWatcherUserId().remove(userId);
+                productRepository.save(product);
+            } else {
+                throw new ProductServiceException("User or Product not found");
+            }
+        } catch (Exception e) {
+            throw new ProductServiceException("Failed to remove user from product watchers", e);
+        }
+    }
 
+    public boolean isUserWatchingProduct(Long userId, Long productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            // 检查用户是否在产品的关注列表中
+            return product.getWatcherUserId().contains(userId);
+        } else {
+            throw new ProductServiceException("User or Product not found");
+        }
+    }
 
+    //发送价格更新邮件给关注了产品的用户
+    public void sendLowestPriceUpdateEmails(Product product, double newLowestPrice) {
+      // 获取关注了该产品的用户列表
+      Set<Long> watcherUserIds = product.getWatcherUserId();
+      List<Long> idList = new ArrayList<>(watcherUserIds);
+      List<User> watchers = userFeignService.getUserById(idList);
 
+      for (User user : watchers) {
+        EmailContent emailContent = new EmailContent();
+        emailContent.setEmail(user.getEmail());
+        emailContent.setPrice(newLowestPrice);
+        emailContent.setProductName(product.getProductName());
+        rabbitTemplate.convertAndSend(queue.getName(), JacksonUtils.toJson(emailContent));
+      }
+    }
 
 }

@@ -1,8 +1,8 @@
 spring:
   cloud:
     nacos:
-      discovery:
-        server-addr: 167.172.71.33:30129
+      config:
+        server-addr: 127.0.0.1:8848
     gateway:
       routes:
         - id: dh-brand
@@ -41,4 +41,4 @@ knife4j:
 
 system:
   properties:
-    whitelist: /api/user/v3/api-docs/default,/api/user/login,/api/user/signup,/v3/api-docs/default
+    whitelist: /api/user/v3/api-docs/default,/api/user/login,/api/user/signup,/v3/api-docs/default,/api/brand/v3/api-docs/default,/api/product/v3/api-docs/default

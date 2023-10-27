@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Instant;
 import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +17,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
-
-
 
 @Data
 @Entity
@@ -40,31 +39,6 @@ public class Brand {
 
     @CreatedDate
     private Instant createDate;
-
-    @OneToMany(mappedBy = "brand")
-    @JsonIgnore
-    private List<Product> products;
-
-
-    public Brand(String brandname) {
-        this.brandname = brandname;
-    }
-
-
-    public Brand(Long id, String brandname){
-        this.id = id;
-        this.brandname = brandname;
-    }
-
-
-    public Brand(String brandname, String description, Long id) {
-        this.brandname = brandname;
-        this.id = id;
-        this.description = description;
-    }
-
-    public Brand(){}
-
 
 
 }

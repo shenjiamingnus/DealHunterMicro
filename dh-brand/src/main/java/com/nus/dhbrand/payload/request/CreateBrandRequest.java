@@ -7,10 +7,10 @@ import javax.validation.constraints.Size;
 
 @Data
 public class CreateBrandRequest {
+
     @NotBlank
     @Size(max = 50)
     private String brandname;
-
 
     @NotBlank
     private String description;

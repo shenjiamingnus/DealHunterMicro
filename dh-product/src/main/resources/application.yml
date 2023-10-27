@@ -31,6 +31,15 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
     time-zone: UTC
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+queue:
+  name: email
+
 server:
   address: 0.0.0.0
   port: 8103

@@ -2,21 +2,19 @@ package com.nus.dhproduct.repository;
 
 import com.nus.dhmodel.pojo.*;
 import java.util.List;
-import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByProductnameContaining(String productname);
+    List<Product> findByProductNameContaining(String productname);
 
-    List<Product> findByBrandname(String brandname);
+    List<Product> findByBrandName(String brandname);
 
-    Boolean existsByProductname(String productname);
+    Boolean existsByProductName(String productname);
 
 //    Optional<Product> findByProductnameAndBrandname(String productname, String brandname);
 

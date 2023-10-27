@@ -10,6 +10,7 @@ import com.nus.dhuser.payload.request.UserPasswordModifyRequest;
 import com.nus.dhuser.payload.response.GeneralApiResponse;
 import com.nus.dhuser.service.UserService;
 import com.nus.dhuser.vo.JwtVo;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,11 @@ public class UserController {
 
   @Autowired
   UserService userService;
+
+  @RequestMapping("/getUsers")
+  public List<User> getUserByUserId(@RequestBody List<Long> userIds){
+    return userService.getUsersByIds(userIds);
+  }
 
   @PostMapping("/login")
   public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {

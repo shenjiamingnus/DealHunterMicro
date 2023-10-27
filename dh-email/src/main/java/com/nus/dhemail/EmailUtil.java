@@ -1,5 +1,6 @@
 package com.nus.dhemail;
 
+import com.nus.dhmodel.dto.EmailContent;
 import javax.annotation.PostConstruct;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,14 @@ public class EmailUtil {
 
   private static String from;
 
-  public static boolean sendEmail(String userEmail, String productName, double newLowestPrice){
+  public static boolean sendEmail(EmailContent emailContent){
     MimeMessage mimeMessage = javaMailSender.createMimeMessage();
     MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage);
     try {
       mimeMessageHelper.setFrom(from);
-      mimeMessageHelper.setTo(userEmail);
-      mimeMessageHelper.setSubject("LowestPrice Update for " + productName);
-      mimeMessageHelper.setText("The newLowestPrice for " + productName + " has been updated to " + newLowestPrice,true);
+      mimeMessageHelper.setTo(emailContent.getEmail());
+      mimeMessageHelper.setSubject("LowestPrice Update for " + emailContent.getProductName());
+      mimeMessageHelper.setText("The newLowestPrice for " + emailContent.getProductName() + " has been updated to " + emailContent.getPrice(),true);
       javaMailSender.send(mimeMessageHelper.getMimeMessage());
     } catch (Exception e) {
       return false;

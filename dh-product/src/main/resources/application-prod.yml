@@ -31,6 +31,15 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
     time-zone: UTC
 
+  rabbitmq:
+    host: rabbitmq-service.dealhunter
+    port: 5672
+    username: admin
+    password: password
+
+queue:
+  name: email
+
 server:
   address: 0.0.0.0
   port: 8080

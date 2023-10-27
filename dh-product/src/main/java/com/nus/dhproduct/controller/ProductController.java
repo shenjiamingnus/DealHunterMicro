@@ -2,12 +2,15 @@ package com.nus.dhproduct.controller;
 
 import com.nus.dhmodel.pojo.PriceHistory;
 import com.nus.dhmodel.pojo.Product;
+import com.nus.dhmodel.pojo.User;
+import com.nus.dhproduct.feign.UserFeignService;
 import com.nus.dhproduct.payload.request.CreateProductRequest;
 import com.nus.dhproduct.payload.request.UpdateProductRequest;
 import com.nus.dhproduct.payload.response.GeneralApiResponse;
 import com.nus.dhproduct.service.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/products")
-
 public class ProductController {
 
     @Autowired
@@ -74,7 +77,7 @@ public class ProductController {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Product failed to created"));
         }
     }
-    
+
     @PutMapping
     public ResponseEntity<GeneralApiResponse> updateProduct(@RequestBody UpdateProductRequest updateProductRequest){
         Product updatedProduct = productService.updateProduct(updateProductRequest);
@@ -99,44 +102,28 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/submit-price")
-    public ResponseEntity<Product> submitNewPrice(
-            @PathVariable Long productId,
-            @RequestParam double newPrice
-    ) {
+    public ResponseEntity<Product> submitNewPrice(@PathVariable Long productId, @RequestParam double newPrice) {
         Product updatedProduct = productService.submitNewPrice(productId, newPrice);
         return ResponseEntity.ok(updatedProduct);
     }
 
-//    @PostMapping("/{productId}/addWatchers")
-//    public ResponseEntity<Void> addUserWatchesProduct(@PathVariable Long productId) {
-//        productService.addUserWatchesProduct(userDetails.getId(), productId);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{productId}/deleteWatchers")
-//    public ResponseEntity<Void> removeUserWatchesProduct(@PathVariable Long productId) {
-//        productService.removeUserWatchesProduct(userDetails.getId(), productId);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{productId}/checkWatchers")
-//    public ResponseEntity<Boolean> isUserWatchingProduct(@PathVariable Long productId) {
-//        boolean isWatching = productService.isUserWatchingProduct(userDetails.getId(), productId);
-//        return new ResponseEntity<>(isWatching, HttpStatus.OK);
-//    }
+    @PostMapping("/{productId}/addWatchers")
+    public ResponseEntity<Void> addUserWatchesProduct(@RequestHeader("userId") Long userId, @PathVariable Long productId) {
+        productService.addUserWatchesProduct(userId, productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-//    @PostMapping("/{productId}/send-price-update-email")
-//    public ResponseEntity<String> sendLowestPriceUpdateEmail(@PathVariable Long productId, @RequestParam double newLowestPrice) {
-//        Product product = productService.getProductById(productId).orElse(null);
-//
-//        if (product != null) {
-//            productService.sendLowestPriceUpdateEmails(product, newLowestPrice);
-//            return new ResponseEntity<>("Price update emails sent successfully.", HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("Product not found.", HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @DeleteMapping("/{productId}/deleteWatchers")
+    public ResponseEntity<Void> removeUserWatchesProduct(@RequestHeader("userId") Long userId, @PathVariable Long productId) {
+        productService.removeUserWatchesProduct(userId, productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @GetMapping("/{productId}/checkWatchers")
+    public ResponseEntity<Boolean> isUserWatchingProduct(@RequestHeader("userId") Long userId, @PathVariable Long productId) {
+        boolean isWatching = productService.isUserWatchingProduct(userId, productId);
+        return new ResponseEntity<>(isWatching, HttpStatus.OK);
+    }
 
 }
 

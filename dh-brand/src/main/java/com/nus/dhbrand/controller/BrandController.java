@@ -12,8 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/brands")
-
 public class BrandController {
+
     @Autowired
     private BrandService brandService;
 
@@ -30,8 +30,8 @@ public class BrandController {
         }else {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to created"));
         }
-
     }
+
     @PutMapping
     public ResponseEntity<GeneralApiResponse> modifyBrand(@RequestBody ModifyBrandRequest modifyBrandRequest){
         Brand modifiedBrand = brandService.modifyBrand(modifyBrandRequest);
@@ -41,7 +41,6 @@ public class BrandController {
             return ResponseEntity.ok(new GeneralApiResponse(false,"Brand failed to modify"));
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Long id){
