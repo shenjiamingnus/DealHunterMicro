@@ -3,6 +3,8 @@ spring:
     nacos:
       discovery:
         server-addr: nacos-service.dealhunter:8848
+      config:
+        server-addr: nacos-service.dealhunter:8848
 
   application:
     name: dh-email
