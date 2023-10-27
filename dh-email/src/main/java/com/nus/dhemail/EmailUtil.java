@@ -38,6 +38,8 @@ public class EmailUtil {
       mimeMessageHelper.setSubject("LowestPrice Update for " + emailContent.getProductName());
       mimeMessageHelper.setText("The newLowestPrice for " + emailContent.getProductName() + " has been updated to " + emailContent.getPrice(),true);
       javaMailSender.send(mimeMessageHelper.getMimeMessage());
+      System.out.println(from);
+      System.out.println(emailContent.getEmail());
     } catch (Exception e) {
       return false;
     }
