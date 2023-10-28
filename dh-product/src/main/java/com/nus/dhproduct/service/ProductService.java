@@ -248,7 +248,6 @@ public class ProductService {
       List<User> watchers = userFeignService.getUserById(idList);
 
       for (User user : watchers) {
-        System.out.println(user.getEmail());
         EmailContent emailContent = new EmailContent();
         emailContent.setEmail(user.getEmail());
         emailContent.setPrice(newLowestPrice);
