@@ -23,13 +23,13 @@ pipeline {
           }
       }
 
-//         stage ('unit test') {
-//             steps {
-//                 container ('maven') {
-//                     sh 'mvn clean test'
-//                 }
-//             }
-//         }
+        stage ('unit test') {
+            steps {
+                container ('maven') {
+                    sh 'mvn clean test'
+                }
+            }
+        }
 
         stage('sonarqube analysis') {
             steps {
