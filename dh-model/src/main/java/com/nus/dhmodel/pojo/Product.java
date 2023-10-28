@@ -55,4 +55,9 @@ public class Product {
     private Set<Long> watcherUserId;
 
     public Product() {}
+
+    public Product(Long productId) {
+    this.id =productId;
+  }
+
 }

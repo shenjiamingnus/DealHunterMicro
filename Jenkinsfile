@@ -13,6 +13,7 @@ pipeline {
       DOCKERHUB_NAMESPACE = 'nandonus'
       GITHUB_ACCOUNT = 'shenjiamingnus'
       APP_NAME = 'deal-hunter'
+      SONAR_CREDENTIAL_ID = 'sonar-token'
   }
 
   stages {
@@ -29,6 +30,21 @@ pipeline {
 //                 }
 //             }
 //         }
+
+        stage('sonarqube analysis') {
+            steps {
+                container('maven') {
+                    withCredentials([string(credentialsId: "$SONAR_CREDENTIAL_ID", variable: 'SONAR_TOKEN')]) {
+                        withSonarQubeEnv('sonar') {
+                            sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=dh-micro'
+                        }
+                    }
+                    timeout(time: 1, unit: 'HOURS') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
 
       stage ('build & push') {
            when{
