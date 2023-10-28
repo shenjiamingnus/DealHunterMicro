@@ -8,10 +8,9 @@ spring:
     name: dh-brand
 
   datasource:
-    url: jdbc:mysql://localhost:3306/dhbrand
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://167.172.71.33:30557/dh-brand?allowMultiQueries=true&serverTimezone=UTC
     username: root
-    password: 123456
+    password: wodemima
 
   mvc:
     pathmatch:

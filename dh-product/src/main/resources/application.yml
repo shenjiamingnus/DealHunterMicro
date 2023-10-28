@@ -15,9 +15,9 @@ spring:
     init:
       mode: always
   datasource:
-    url: jdbc:mysql://localhost:3306/dh-product?allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://167.172.71.33:30005/dh-product?allowMultiQueries=true&serverTimezone=UTC
     username: root
-    password: wer2000915shen
+    password: wodemima
   jpa:
     properties:
       hibernate:
