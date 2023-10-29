@@ -43,7 +43,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         Set<String> whiteList = this.getWhiteList();
         String path = exchange.getRequest().getPath().toString();
 
-        // 白名单接口、开放接口放行
+      // 白名单接口、开放接口放行
 //        if (bookMatch || whiteList.contains(path)) {
         if (whiteList.contains(path)) {
             return chain.filter(exchange);
@@ -87,7 +87,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return 0;
+        return 1;
     }
 
     /**
