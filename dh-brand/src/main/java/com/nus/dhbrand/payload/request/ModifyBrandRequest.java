@@ -15,8 +15,6 @@ public class ModifyBrandRequest {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private String imageUrl;
 
     @NotBlank
     private Long id;
@@ -25,7 +23,5 @@ public class ModifyBrandRequest {
         this.id = id;
         this.brandname= brandname;
         this.description =description;
-
-
     }
 }

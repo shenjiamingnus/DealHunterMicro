@@ -38,7 +38,6 @@ public class BrandService {
         Brand brand = new Brand();
         brand.setBrandname(createBrandRequest.getBrandname());
         brand.setDescription(createBrandRequest.getDescription());
-        brand.setImageUrl(createBrandRequest.getImageUrl());
         brand.setCreateDate(Instant.now());
         return brandRepository.save(brand);
     }
