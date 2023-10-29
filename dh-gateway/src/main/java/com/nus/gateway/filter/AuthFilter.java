@@ -17,6 +17,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -45,6 +46,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         // 白名单接口、开放接口放行
 //        if (bookMatch || whiteList.contains(path)) {
         if (whiteList.contains(path)) {
+            return chain.filter(exchange);
+        }
+        if (exchange.getRequest().getMethod().equals(HttpMethod.GET)){
             return chain.filter(exchange);
         }
 

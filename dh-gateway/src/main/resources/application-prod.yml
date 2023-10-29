@@ -19,6 +19,14 @@ spring:
           uri: lb://dh-product
           predicates:
             - Path=/api/product/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+
   application:
     name: dh-gateway
   main:
