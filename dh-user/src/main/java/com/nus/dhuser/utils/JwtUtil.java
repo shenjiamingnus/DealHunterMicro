@@ -28,6 +28,7 @@ public class JwtUtil {
                 .setExpiration(expire)
                 .claim("username",user.getUsername())
                 .claim("id",user.getId())
+                .claim("isAdmin", user.getIsAdmin())
                 .compact();
         return jwt;
     }

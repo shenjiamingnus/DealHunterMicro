@@ -106,11 +106,7 @@ public class UserService {
     if (user.getPassword().equals(UserUtil.getUserEncryptPassword(loginRequest.getUsername(), loginRequest.getPassword()))) {
       UserVO userVO = new UserVO();
       BeanUtils.copyProperties(user, userVO);
-      String buildJwt = JwtUtil.buildJwt(this.getLoginExpre(), userVO);
-      JwtVo jwtVo = new JwtVo();
-      jwtVo.setToken(buildJwt);
-      jwtVo.setUsername(userVO.getUsername());
-      jwtVo.setId(userVO.getId());
+
       Set<Role> roles = user.getRoles();
       int isAdmin = 0;
       for(Role r : roles) {
@@ -119,6 +115,12 @@ public class UserService {
           break;
         }
       }
+      userVO.setIsAdmin(isAdmin);
+      String buildJwt = JwtUtil.buildJwt(this.getLoginExpre(), userVO);
+      JwtVo jwtVo = new JwtVo();
+      jwtVo.setToken(buildJwt);
+      jwtVo.setUsername(userVO.getUsername());
+      jwtVo.setId(userVO.getId());
       jwtVo.setIsAdmin(isAdmin);
       return jwtVo;
     }else {

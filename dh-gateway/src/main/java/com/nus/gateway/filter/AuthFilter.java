@@ -6,6 +6,7 @@ import com.nus.common.result.Result;
 import com.nus.dhmodel.pojo.User;
 import com.nus.gateway.config.SystemPropertiesConfig;
 import com.nus.gateway.utils.JwtUtil;
+import com.nus.gateway.vo.UserVO;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,14 +57,15 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (!whiteList.contains(segments[1])) {
             // 认证
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-            Result<User> result = JwtUtil.validationToken(token);
+            Result<UserVO> result = JwtUtil.validationToken(token);
             if (result.getCode() == HttpCodeEnum.OK.getCode()) {
                 // 认证通过
-                User user = result.getData();
+                UserVO user = result.getData();
                 // 追加请求头用户信息
                 Consumer<HttpHeaders> httpHeaders = httpHeader -> {
-                    httpHeader.set("userId",user.getId().toString());
+                    httpHeader.set("userId", user.getId().toString());
                     httpHeader.set("username",user.getUsername());
+                    httpHeader.set("isAdmin", user.getIsAdmin().toString());
                 };
                 ServerHttpRequest serverHttpRequest = exchange.getRequest()
                         .mutate()

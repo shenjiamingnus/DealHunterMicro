@@ -23,7 +23,10 @@ public class BrandController {
     }
 
     @PostMapping
-    public ResponseEntity<GeneralApiResponse> createBrand(@RequestBody CreateBrandRequest createBrandRequest){
+    public ResponseEntity<GeneralApiResponse> createBrand(@RequestBody CreateBrandRequest createBrandRequest, @RequestHeader("isAdmin") int isAdmin){
+        if (isAdmin != 1) {
+          return ResponseEntity.ok(new GeneralApiResponse(false,"Not Admin User!"));
+        }
         Brand savedBrand = brandService.createBrand(createBrandRequest);
         if(savedBrand != null){
             return ResponseEntity.ok(new GeneralApiResponse(true,"Brand created!"));
@@ -33,7 +36,10 @@ public class BrandController {
     }
 
     @PutMapping
-    public ResponseEntity<GeneralApiResponse> modifyBrand(@RequestBody ModifyBrandRequest modifyBrandRequest){
+    public ResponseEntity<GeneralApiResponse> modifyBrand(@RequestBody ModifyBrandRequest modifyBrandRequest, @RequestHeader("isAdmin") int isAdmin){
+        if (isAdmin != 1) {
+          return ResponseEntity.ok(new GeneralApiResponse(false,"Not Admin User!"));
+        }
         Brand modifiedBrand = brandService.modifyBrand(modifyBrandRequest);
         if(modifiedBrand != null){
             return ResponseEntity.ok(new GeneralApiResponse(true,"Brand modified!"));
@@ -43,9 +49,12 @@ public class BrandController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBrand(@PathVariable Long id){
+    public ResponseEntity<GeneralApiResponse> deleteBrand(@PathVariable Long id, @RequestHeader("isAdmin") int isAdmin){
+        if (isAdmin != 1) {
+          return ResponseEntity.ok(new GeneralApiResponse(false,"Not Admin User!"));
+        }
         brandService.deleteBrand(id);
-        return ResponseEntity.noContent().build();
+      return ResponseEntity.ok(new GeneralApiResponse(true,"Brand Deleted!"));
     }
 
     @GetMapping("/brandname")

@@ -76,7 +76,10 @@ public class UserController {
   }
 
   @PostMapping("/admin/create")
-  public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminCreateRequest adminCreateRequest) {
+  public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminCreateRequest adminCreateRequest, @RequestHeader("isAdmin") int isAdmin) {
+    if (isAdmin != 1) {
+      return ResponseEntity.ok(new GeneralApiResponse(false,"Not Admin User!"));
+    }
     if (userService.checkUserNameExists(adminCreateRequest.getUsername())) {
       return new ResponseEntity<>(new GeneralApiResponse(false, "Username already registered!"), HttpStatus.BAD_REQUEST);
     }

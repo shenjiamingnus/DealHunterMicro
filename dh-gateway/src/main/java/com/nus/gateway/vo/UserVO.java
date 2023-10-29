@@ -1,4 +1,4 @@
-package com.nus.dhuser.vo;
+package com.nus.gateway.vo;
 
 import java.io.Serializable;
 import lombok.Data;
@@ -12,5 +12,5 @@ public class UserVO implements Serializable {
 
   public String username;
 
-  public int isAdmin;
+  public Integer isAdmin;
 }
