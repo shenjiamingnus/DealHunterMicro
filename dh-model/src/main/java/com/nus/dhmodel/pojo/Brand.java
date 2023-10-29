@@ -35,10 +35,7 @@ public class Brand {
 
     private String description;
 
-    private String imageUrl;
-
     @CreatedDate
     private Instant createDate;
-
 
 }
