@@ -74,6 +74,7 @@ public class UserService {
     User user = new User(adminCreateRequest.getUsername(), adminCreateRequest.getPassword());
     user.setPassword(UserUtil.getUserEncryptPassword(user.getUsername(), user.getPassword()));
     user.setCreateDate(Instant.now());
+    user.setEmail(adminCreateRequest.getEmail());
     Role userRole = roleRepository.findByName(RoleName.USER)
         .orElseThrow(() -> new CommonException("User Role not set."));
     Role adminRole = roleRepository.findByName(RoleName.ADMIN)
