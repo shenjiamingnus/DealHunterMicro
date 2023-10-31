@@ -26,7 +26,6 @@ public class PriceHistoryService {
         if (createPriceHistoryRequest == null) {
             return null;
         }
-
         PriceHistory priceHistory = new PriceHistory();
         priceHistory.setPrice(createPriceHistoryRequest.getPrice());
         priceHistory.setCreateDate(Instant.now());
@@ -46,9 +45,25 @@ public class PriceHistoryService {
 
     public void deletePriceHistory(Long priceHistoryId) {
         try {
-            priceHistoryRepository.deleteById(priceHistoryId);
+            Optional<PriceHistory> optionalProductPriceHistory = priceHistoryRepository.findById(priceHistoryId);
+            if (optionalProductPriceHistory.isPresent()){
+                PriceHistory priceHistory = optionalProductPriceHistory.get();
+                Product product = priceHistory.getProduct();
+                priceHistoryRepository.deleteById(priceHistoryId);
+                if (product.getLowestPrice().equals(priceHistory.getPrice())) {
+                    List<PriceHistory> priceHistoryList = product.getPriceHistoryList();
+                    double newLowestPrice = Double.MAX_VALUE;
+                    for(PriceHistory p : priceHistoryList){
+                        newLowestPrice = Math.min(newLowestPrice, p.getPrice());
+                    }
+                    product.setLowestPrice(newLowestPrice);
+                    productRepository.save(product);
+                }
+            } else {
+                throw new PriceHistoryServiceException("ProductHistory with ID " + priceHistoryId + " not found");
+            }
         }catch(Exception e){
-            throw new PriceHistoryServiceException("Failed to retrieve all priceHistory ", e);
+            throw new PriceHistoryServiceException("Failed to delete priceHistory ", e);
         }
     }
 

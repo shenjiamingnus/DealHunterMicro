@@ -50,6 +50,10 @@ public class AuthFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
         if (exchange.getRequest().getMethod().equals(HttpMethod.GET)){
+            String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+            if (token != null){
+              return getMono(exchange, chain, token);
+            }
             return chain.filter(exchange);
         }
 
@@ -57,37 +61,38 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (!whiteList.contains(segments[1])) {
             // 认证
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-            Result<UserVO> result = JwtUtil.validationToken(token);
-            if (result.getCode() == HttpCodeEnum.OK.getCode()) {
-                // 认证通过
-                UserVO user = result.getData();
-                // 追加请求头用户信息
-                Consumer<HttpHeaders> httpHeaders = httpHeader -> {
-                    httpHeader.set("userId", user.getId().toString());
-                    httpHeader.set("username",user.getUsername());
-                    httpHeader.set("isAdmin", user.getIsAdmin().toString());
-                };
-                ServerHttpRequest serverHttpRequest = exchange.getRequest()
-                        .mutate()
-                        .headers(httpHeaders)
-                        .build();
-                exchange.mutate().request(serverHttpRequest).build();
-                return chain.filter(exchange);
-            }
-
-            // 认证过期、失败，均返回401
-            ServerHttpResponse response = exchange.getResponse();
-            byte[] bits = JSONObject.toJSONString(result).getBytes(StandardCharsets.UTF_8);
-            DataBuffer buffer = response.bufferFactory().wrap(bits);
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            // 指定编码，否则在浏览器中会中文乱码
-//            response.getHeaders().add("Content-Type", "text/plain;charset=UTF-8");
-            return response.writeWith(Mono.just(buffer));
+            return getMono(exchange, chain, token);
         }
         return chain.filter(exchange);
     }
 
-    @Override
+  private Mono<Void> getMono(ServerWebExchange exchange, GatewayFilterChain chain, String token) {
+      Result<UserVO> result = JwtUtil.validationToken(token);
+      if (result.getCode() == HttpCodeEnum.OK.getCode()) {
+          UserVO user = result.getData();
+          // 追加请求头用户信息
+          Consumer<HttpHeaders> httpHeaders = httpHeader -> {
+            httpHeader.set("userId", user.getId().toString());
+            httpHeader.set("username", user.getUsername());
+            httpHeader.set("isAdmin", user.getIsAdmin().toString());
+          };
+          ServerHttpRequest serverHttpRequest = exchange.getRequest()
+              .mutate()
+              .headers(httpHeaders)
+              .build();
+          exchange.mutate().request(serverHttpRequest).build();
+          return chain.filter(exchange);
+      }
+
+      // 认证过期、失败，均返回401
+      ServerHttpResponse response = exchange.getResponse();
+      byte[] bits = JSONObject.toJSONString(result).getBytes(StandardCharsets.UTF_8);
+      DataBuffer buffer = response.bufferFactory().wrap(bits);
+      response.setStatusCode(HttpStatus.UNAUTHORIZED);
+      return response.writeWith(Mono.just(buffer));
+  }
+
+  @Override
     public int getOrder() {
         return 1;
     }
