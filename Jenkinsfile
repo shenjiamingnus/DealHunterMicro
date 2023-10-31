@@ -102,9 +102,9 @@ pipeline {
               variable: 'KUBECONFIG')
               ]) {
 //               sh 'envsubst < dh-brand/deploy/dh-brand-deploy.yaml | kubectl apply -f -'
-              sh 'envsubst < dh-user/deploy/dh-user-deploy.yaml | kubectl apply -f -'
+//               sh 'envsubst < dh-user/deploy/dh-user-deploy.yaml | kubectl apply -f -'
 //               sh 'envsubst < dh-email/deploy/dh-email-deploy.yaml | kubectl apply -f -'
-//               sh 'envsubst < dh-product/deploy/dh-product-deploy.yaml | kubectl apply -f -'
+              sh 'envsubst < dh-product/deploy/dh-product-deploy.yaml | kubectl apply -f -'
               sh 'envsubst < dh-gateway/deploy/dh-gateway-deploy.yaml | kubectl apply -f -'
             }
           }
