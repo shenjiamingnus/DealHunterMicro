@@ -44,7 +44,7 @@ public class EmailUtil {
                       "The new lowest price for " + emailContent.getProductName() + " has been updated to $" + emailContent.getPrice() + ".\n\n" +
                       "Don't miss out on the savings! Visit our website to explore the latest pricing and secure your order.\n\n" +
                       "Thank you for being a valued subscriber. We hope you enjoy your shopping experience with us!\n\n" +
-                      "Best Regards,\n[Deal hunter]", true);
+                      "Best Regards,\n[Deal hunter]", false);
       javaMailSender.send(mimeMessageHelper.getMimeMessage());
     } catch (Exception e) {
       return false;
