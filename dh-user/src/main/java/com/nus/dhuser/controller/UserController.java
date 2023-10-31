@@ -35,8 +35,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-
+  public ResponseEntity<GeneralApiResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
     try {
       JwtVo jwtVo = userService.login(loginRequest);
       return ResponseEntity.ok(new GeneralApiResponse(true, "log in successed!", jwtVo));
@@ -46,7 +45,7 @@ public class UserController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest){
+  public ResponseEntity<GeneralApiResponse> register(@Valid @RequestBody SignupRequest signupRequest){
     if (userService.checkUserNameExists(signupRequest.getUsername())) {
       return new ResponseEntity<>(new GeneralApiResponse(false, "Username already registered!"), HttpStatus.BAD_REQUEST);
     }
@@ -58,7 +57,7 @@ public class UserController {
   }
 
   @PutMapping("/modify/password")
-  public ResponseEntity<?> modifyPassword(@RequestHeader("userId") Long userId, @Valid @RequestBody UserPasswordModifyRequest userModifyRequest) {
+  public ResponseEntity<GeneralApiResponse> modifyPassword(@RequestHeader("userId") Long userId, @Valid @RequestBody UserPasswordModifyRequest userModifyRequest) {
     User modifyUser = userService.modifyUserPassword(userId, userModifyRequest);
     if (modifyUser!= null) {
       return ResponseEntity.ok(new GeneralApiResponse(true, "User Detail modified!"));
@@ -67,7 +66,7 @@ public class UserController {
   }
 
   @PutMapping("/modify/email")
-  public ResponseEntity<?> modifyEmail(@RequestHeader("userId") Long userId, @Valid @RequestBody UserEmailModifyRequest userModifyRequest) {
+  public ResponseEntity<GeneralApiResponse> modifyEmail(@RequestHeader("userId") Long userId, @Valid @RequestBody UserEmailModifyRequest userModifyRequest) {
     User modifyUser = userService.modifyUserEmail(userId, userModifyRequest);
     if (modifyUser!= null) {
       return ResponseEntity.ok(new GeneralApiResponse(true, "User Detail modified!"));
@@ -76,7 +75,7 @@ public class UserController {
   }
 
   @PostMapping("/admin/create")
-  public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminCreateRequest adminCreateRequest, @RequestHeader("isAdmin") int isAdmin) {
+  public ResponseEntity<GeneralApiResponse> createAdmin(@Valid @RequestBody AdminCreateRequest adminCreateRequest, @RequestHeader("isAdmin") int isAdmin) {
     if (isAdmin != 1) {
       return ResponseEntity.ok(new GeneralApiResponse(false,"Not Admin User!"));
     }

@@ -3,15 +3,14 @@ package com.nus.gateway.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.nus.common.result.HttpCodeEnum;
 import com.nus.common.result.Result;
-import com.nus.dhmodel.pojo.User;
 import com.nus.gateway.config.SystemPropertiesConfig;
 import com.nus.gateway.utils.JwtUtil;
 import com.nus.gateway.vo.UserVO;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -49,7 +48,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (whiteList.contains(path)) {
             return chain.filter(exchange);
         }
-        if (exchange.getRequest().getMethod().equals(HttpMethod.GET)){
+        if (Objects.requireNonNull(exchange.getRequest().getMethod()).equals(HttpMethod.GET)){
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
             if (token != null){
               return getMono(exchange, chain, token);

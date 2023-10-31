@@ -62,7 +62,6 @@ public class PriceHistoryController {
             PriceHistory addedPriceHistory = productService.addPriceHistoryToProduct(productId, newPriceHistory);
             return new ResponseEntity<>(addedPriceHistory, HttpStatus.CREATED);
         } catch (ProductServiceException e) {
-            // 处理异常并返回适当的响应
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
