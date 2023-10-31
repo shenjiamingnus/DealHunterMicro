@@ -65,4 +65,4 @@ minio:
   access_key: YOURACCESSKEY
   secret_key: YOURSECRETKEY
   bucket: dealhunter
-  end_point: minio-service.dealhunter：9000
+  end_point: minio-service.dealhunter:9000
