@@ -121,6 +121,7 @@ public class UserService {
       jwtVo.setToken(buildJwt);
       jwtVo.setUsername(userVO.getUsername());
       jwtVo.setId(userVO.getId());
+      jwtVo.setEmail(user.getEmail());
       jwtVo.setIsAdmin(isAdmin);
       return jwtVo;
     }else {

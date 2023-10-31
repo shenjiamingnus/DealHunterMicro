@@ -11,6 +11,8 @@ public class JwtVo {
 
   public String token;
 
+  public String email;
+
   public Integer isAdmin;
 
 }
