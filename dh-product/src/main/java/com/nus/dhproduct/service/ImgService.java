@@ -39,6 +39,7 @@ public class ImgService {
       minioClient.putObject(putObjectArgs);
 
     } catch (Exception ex) {
+      ex.printStackTrace();
       return null;
     }
     return endPoint + "/" + bucket + "/" + objectName + ".png";
