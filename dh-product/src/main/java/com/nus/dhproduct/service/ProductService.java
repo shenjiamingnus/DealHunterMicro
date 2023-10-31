@@ -92,7 +92,17 @@ public class ProductService {
         product.setBrandId(createProductRequest.getBrand_id());
         product.setWatcherUserId(new HashSet<>());
         product.setCreateDate(Instant.now());
-        return productRepository.save(product);
+        // 创建新的价格历史记录对象
+        Product credatedProduct = productRepository.save(product);
+
+        // 创建新的价格历史记录对象
+        PriceHistory newPriceHistory = new PriceHistory();
+        newPriceHistory.setProduct(product);
+        newPriceHistory.setCreateDate(Instant.now());
+        newPriceHistory.setPrice(credatedProduct.getCurrentPrice());
+        priceHistoryRepository.save(newPriceHistory);
+
+        return credatedProduct;
     }
 
     public Product updateProduct(UpdateProductRequest updateProductRequest){
