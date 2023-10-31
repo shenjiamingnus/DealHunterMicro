@@ -23,28 +23,28 @@ pipeline {
           }
       }
 
-        stage ('unit test') {
-            steps {
-                container ('maven') {
-                    sh 'mvn clean test'
-                }
-            }
-        }
+      stage ('unit test') {
+          steps {
+              container ('maven') {
+                  sh 'mvn clean test'
+              }
+          }
+      }
 
-        stage('sonarqube analysis') {
-            steps {
-                container('maven') {
-                    withCredentials([string(credentialsId: "$SONAR_CREDENTIAL_ID", variable: 'SONAR_TOKEN')]) {
-                        withSonarQubeEnv('sonar') {
-                            sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=dh-micro -Dsonar.host.url=http://167.172.71.33:30288'
-                        }
-                    }
-                    timeout(time: 1, unit: 'HOURS') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-        }
+      stage('sonarqube analysis') {
+          steps {
+              container('maven') {
+                  withCredentials([string(credentialsId: "$SONAR_CREDENTIAL_ID", variable: 'SONAR_TOKEN')]) {
+                      withSonarQubeEnv('sonar') {
+                          sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=dh-micro -Dsonar.host.url=http://167.172.71.33:30288'
+                      }
+                  }
+                  timeout(time: 1, unit: 'HOURS') {
+                      waitForQualityGate abortPipeline: true
+                  }
+              }
+          }
+      }
 
       stage ('build & push') {
            when{
