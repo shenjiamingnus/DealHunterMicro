@@ -54,7 +54,7 @@ public class BrandController {
           return ResponseEntity.ok(new GeneralApiResponse(false,"Only Admin User can delete brand!"));
         }
         brandService.deleteBrand(id);
-      return ResponseEntity.ok(new GeneralApiResponse(true,"Brand Deleted!"));
+        return ResponseEntity.ok(new GeneralApiResponse(true,"Brand Deleted!"));
     }
 
     @GetMapping("/brandname")

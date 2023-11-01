@@ -1,4 +1,4 @@
-package com.nus.dhproduct;
+package com.nus.dhproduct.controller;
 
 import static org.mockito.Mockito.anyDouble;
 import static org.mockito.Mockito.anyLong;

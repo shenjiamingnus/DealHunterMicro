@@ -42,7 +42,7 @@ public class BrandService {
         return brandRepository.save(brand);
     }
 
-    public  Brand modifyBrand(ModifyBrandRequest modifyBrandRequest){
+    public Brand modifyBrand(ModifyBrandRequest modifyBrandRequest){
         Brand brand = brandRepository.findById(modifyBrandRequest.getId()).get();
         brand.setBrandname(modifyBrandRequest.getBrandname());
         brand.setDescription(modifyBrandRequest.getDescription());
