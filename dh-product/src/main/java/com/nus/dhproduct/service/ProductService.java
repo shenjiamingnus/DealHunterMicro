@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,9 @@ public class ProductService {
     @Autowired
     private Queue queue;
 
-    public Boolean checkProductNameExists(String productname) {
-        return productRepository.existsByProductName(productname);
-    }
+//    public Boolean checkProductNameExists(String productname) {
+//        return productRepository.existsByProductName(productname);
+//    }
 
     public List<Product> getAllProducts(){
         try {
@@ -107,15 +108,17 @@ public class ProductService {
 
     public Product updateProduct(UpdateProductRequest updateProductRequest){
         Product product = productRepository.findById(updateProductRequest.getProduct_id()).get();
+        BeanUtils.copyProperties(updateProductRequest, product);
         product.setProductName(updateProductRequest.getProductname());
         product.setStoreAddress(updateProductRequest.getStoreAddress());
         product.setDescription(updateProductRequest.getDescription());
         return productRepository.save(product);
     }
 
-    public void deleteProduct(Long id) {
+    public boolean deleteProduct(Long id) {
         try {
             productRepository.deleteById(id);
+            return true;
         }catch (Exception e){
             throw new ProductServiceException("Failed to delete product", e);
         }

@@ -76,16 +76,16 @@ pipeline {
          }
          steps{
               container ('maven') {
-                sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
-                sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
-                sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
-                sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
-                sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
-                sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
               }
          }
       }

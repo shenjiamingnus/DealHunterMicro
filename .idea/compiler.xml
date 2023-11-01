@@ -13,6 +13,7 @@
         <module name="dh-email" />
         <module name="dh-model" />
         <module name="dh-user" />
+        <module name="dh-test" />
         <module name="dh-brand" />
       </profile>
     </annotationProcessing>

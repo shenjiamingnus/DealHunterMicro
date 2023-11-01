@@ -1,5 +1,6 @@
 package com.nus.dhbrand.service;
 
+import com.nus.dhbrand.exception.BrandServiceException;
 import com.nus.dhbrand.payload.request.CreateBrandRequest;
 import com.nus.dhbrand.payload.request.ModifyBrandRequest;
 import com.nus.dhbrand.repository.BrandRepository;
@@ -15,6 +16,7 @@ import java.util.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -27,6 +29,12 @@ class BrandServiceTest {
     BrandService brandService;
 
     @Test
+    void testCheckBrandNameExists(){
+        Mockito.when(brandRepository.existsByBrandname("A")).thenReturn(true);
+        assertTrue(brandService.checkBrandNameExists("A"));
+    }
+
+    @Test
     void testGetAllBrands(){
         List<Brand> brands = Arrays.asList(new Brand(),new Brand());
         Mockito.when(brandRepository.findAll()).thenReturn(brands);
@@ -34,6 +42,11 @@ class BrandServiceTest {
         List<Brand> result = brandService.getAllBrands();
 
         Assertions.assertEquals(brands, result);
+
+        when(brandRepository.findAll()).thenThrow(NullPointerException.class);
+        Assertions.assertThrows(BrandServiceException.class, ()->{
+            brandService.getAllBrands();
+        });
     }
 
     @Test
@@ -56,6 +69,8 @@ class BrandServiceTest {
         // 断言返回的Brand对象是否符合预期
         Assertions.assertEquals("BrandName", createdBrand.getBrandname());
         Assertions.assertEquals("Description", createdBrand.getDescription());
+
+        Assertions.assertNull(brandService.createBrand(null));
     }
 
     @Test
@@ -98,6 +113,7 @@ class BrandServiceTest {
 
         // 验证brandRepository的deleteById方法是否被调用
         verify(brandRepository).deleteById(brandIdToDelete);
+
     }
 
     @Test
@@ -127,6 +143,11 @@ class BrandServiceTest {
 
         // 验证返回的品牌列表是否与模拟的列表匹配
         Assertions.assertEquals(mockBrandList.size(), resultBrands.size());
+
+        when(brandRepository.findByBrandname("A")).thenThrow(NullPointerException.class);
+        Assertions.assertThrows(BrandServiceException.class, ()->{
+          brandService.getBrandByBrandname("A");
+        });
 
     }
 

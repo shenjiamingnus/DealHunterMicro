@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.nus.dhmodel.pojo.PriceHistory;
 import com.nus.dhmodel.pojo.Product;
-import com.nus.dhproduct.controller.ProductController;
 import com.nus.dhproduct.payload.request.CreateProductRequest;
 import com.nus.dhproduct.payload.request.UpdateProductRequest;
 import com.nus.dhproduct.payload.response.GeneralApiResponse;
@@ -97,10 +96,16 @@ class ProductControllerTest {
 
     @Test
     void testCreateProduct() {
+        CreateProductRequest createProductRequest = new CreateProductRequest();
+        createProductRequest.setDescription("A");
+        createProductRequest.setCurrentPrice(1.0);
+        createProductRequest.setBrand_id(1L);
+        createProductRequest.setStoreAddress("A");
+        createProductRequest.setBrandname("A");
+        createProductRequest.setProductname("A");
+        createProductRequest.setImageUrl("A");
 
-        CreateProductRequest createProductRequest = new CreateProductRequest("Product 1", "Brand 1", "Store 1", "Description 1", "https://example.com", 19.99, 1L);
         when(productService.createProduct(createProductRequest)).thenReturn(new Product());
-
         ResponseEntity<GeneralApiResponse> response = productController.createProduct(createProductRequest);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -113,7 +118,16 @@ class ProductControllerTest {
 
     @Test
     void testUpdateProduct() {
-        UpdateProductRequest updateProductRequest = new UpdateProductRequest(1L,"Product 1", "Brand 1", "Store 1", "Description 1", "https://example.com", 19.99, 20.20,1L);
+        UpdateProductRequest updateProductRequest = new UpdateProductRequest();
+        updateProductRequest.setProduct_id(1L);
+        updateProductRequest.setBrandname("A");
+        updateProductRequest.setDescription("A");
+        updateProductRequest.setLowestPrice(1.0);
+        updateProductRequest.setBrand_id(1L);
+        updateProductRequest.setCurrentPrice(1.0);
+        updateProductRequest.setStoreAddress("A");
+        updateProductRequest.setImageUrl("A");
+
         when(productService.updateProduct(updateProductRequest)).thenReturn(new Product());
 
         ResponseEntity<GeneralApiResponse> response = productController.updateProduct(updateProductRequest);

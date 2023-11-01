@@ -59,25 +59,9 @@ public class BrandService {
 
     public List<Brand> getBrandByBrandname(String brandname) {
         try {
-          List<Brand> brands = brandRepository.findByBrandname(brandname);
-
           return brandRepository.findByBrandname(brandname);
         }catch (Exception e){
             throw new BrandServiceException("Failed to find brand", e);
         }
     }
-
-    public Brand save(Brand brand){
-       return brandRepository.save(brand);
-    }
-
-    public  void delete(Long id){
-        brandRepository.deleteById(id);
-    }
-
-    public Optional<Brand> findById(Long id){
-        return brandRepository.findById(id);
-    }
-
-
 }

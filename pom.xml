@@ -9,6 +9,12 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <properties>
+    <sonar.coverage.jacoco.xmlReportPaths>
+      dh-test/target/site/jacoco-aggregate/index.html
+    </sonar.coverage.jacoco.xmlReportPaths>
+  </properties>
+
   <modules>
     <module>dh-user</module>
     <module>dh-email</module>
@@ -17,6 +23,7 @@
     <module>dh-gateway</module>
     <module>dh-common</module>
     <module>dh-model</module>
+    <module>dh-test</module>
   </modules>
 
   <build>
