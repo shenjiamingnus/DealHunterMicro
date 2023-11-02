@@ -16,10 +16,4 @@ public class CreatePriceHistoryRequest {
     @NotNull
     private Long product_id;
 
-    public CreatePriceHistoryRequest(Double price, Instant createDate, Long product_id){
-        this.price = price;
-        this.createDate = createDate;
-        this.product_id = product_id;
-    }
-
 }

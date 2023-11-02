@@ -35,13 +35,13 @@ public class PriceHistoryService {
     }
 
 
-    public PriceHistory updatePriceHistory(PriceHistory priceHistory){
-        try {
-            return priceHistoryRepository.save(priceHistory);
-        } catch (Exception e) {
-            throw new PriceHistoryServiceException("Failed to update priceHistory ", e);
-        }
-    }
+//    public PriceHistory updatePriceHistory(PriceHistory priceHistory){
+//        try {
+//            return priceHistoryRepository.save(priceHistory);
+//        } catch (Exception e) {
+//            throw new PriceHistoryServiceException("Failed to update priceHistory ", e);
+//        }
+//    }
 
     public void deletePriceHistory(Long priceHistoryId) {
         try {
