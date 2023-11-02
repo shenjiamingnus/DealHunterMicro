@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 @SpringBootTest
 class UserControllerTest {
 
@@ -87,6 +86,5 @@ class UserControllerTest {
     Assertions.assertFalse(userController.createAdmin(adminCreateRequest, 1).getBody().getSuccess());
     when(userService.createAdminUser(adminCreateRequest)).thenReturn(new User());
     Assertions.assertTrue(userController.createAdmin(adminCreateRequest, 1).getBody().getSuccess());
-
   }
 }

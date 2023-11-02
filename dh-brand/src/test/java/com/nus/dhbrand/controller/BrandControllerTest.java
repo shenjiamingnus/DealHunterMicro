@@ -4,6 +4,7 @@ import com.nus.dhbrand.payload.request.CreateBrandRequest;
 import com.nus.dhbrand.payload.request.ModifyBrandRequest;
 import com.nus.dhbrand.service.BrandService;
 import com.nus.dhmodel.pojo.Brand;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 import static org.mockito.Mockito.when;
 
@@ -53,6 +55,9 @@ class BrandControllerTest {
 
         when(brandService.createBrand(request)).thenReturn(createdBrand);
         Assertions.assertTrue(brandController.createBrand(request, 1).getBody().getSuccess());
+        Assertions.assertFalse(brandController.createBrand(request, 0).getBody().getSuccess());
+        when(brandService.createBrand(request)).thenReturn(null);
+        Assertions.assertFalse(brandController.createBrand(request, 1).getBody().getSuccess());
     }
 
     @Test
@@ -69,11 +74,15 @@ class BrandControllerTest {
 
         when(brandService.modifyBrand(modifyRequest)).thenReturn(brand);
         Assertions.assertTrue(brandController.modifyBrand(modifyRequest,1).getBody().getSuccess());
+        Assertions.assertFalse(brandController.modifyBrand(modifyRequest, 0).getBody().getSuccess());
+        when(brandService.modifyBrand(modifyRequest)).thenReturn(null);
+        Assertions.assertFalse(brandController.modifyBrand(modifyRequest, 1).getBody().getSuccess());
     }
 
     @Test
     void testDeleteBrand(){
         Assertions.assertTrue(brandController.deleteBrand(1L,1).getBody().getSuccess());
+        Assertions.assertFalse(brandController.deleteBrand(1L, 0).getBody().getSuccess());
     }
 
     @Test
@@ -88,5 +97,7 @@ class BrandControllerTest {
         List<Brand> brandList = Arrays.asList(brand1, brand2, brand3);
         when(brandService.getBrandByBrandname("brandname")).thenReturn(brandList);
         Assertions.assertEquals(brandList, brandController.getBrandByBrandname("brandname").getBody());
+        when(brandService.getBrandByBrandname("brandname")).thenReturn(new ArrayList<Brand>());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, brandController.getBrandByBrandname("brandname").getStatusCode());
     }
 }

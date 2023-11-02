@@ -8,12 +8,15 @@ import com.nus.dhmodel.enums.RoleName;
 import com.nus.dhmodel.pojo.Role;
 import com.nus.dhmodel.pojo.User;
 import com.nus.dhuser.payload.request.AdminCreateRequest;
+import com.nus.dhuser.payload.request.LoginRequest;
 import com.nus.dhuser.payload.request.SignupRequest;
 import com.nus.dhuser.payload.request.UserEmailModifyRequest;
 import com.nus.dhuser.payload.request.UserPasswordModifyRequest;
 import com.nus.dhuser.repository.RoleRepository;
 import com.nus.dhuser.repository.UserRepository;
 import com.nus.dhuser.service.UserService;
+import com.nus.dhuser.utils.UserUtil;
+import java.util.HashSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -98,6 +101,24 @@ public class UserServiceTest {
     UserEmailModifyRequest userEmailModifyRequest = new UserEmailModifyRequest();
     userEmailModifyRequest.setEmail("aaa");
     Assertions.assertNotNull(userService.modifyUserEmail(1L, userEmailModifyRequest));
+  }
 
+  @Test
+  void login() {
+    LoginRequest loginRequest = new LoginRequest();
+    loginRequest.setPassword("A");
+    loginRequest.setUsername("A");
+    String userEncryptPassword = UserUtil.getUserEncryptPassword(loginRequest.getUsername(), loginRequest.getPassword());
+    User user = new User();
+    user.setPassword(userEncryptPassword);
+    user.setUsername("A");
+    user.setEmail("A");
+    HashSet<Role> roles = new HashSet<>();
+    Role role = new Role();
+    role.setName(RoleName.USER);
+    roles.add(role);
+    user.setRoles(roles);
+    when(userRepository.findByUsername("A")).thenReturn(Optional.of(user));
+    Assertions.assertEquals("A", userService.login(loginRequest).getUsername());
   }
 }

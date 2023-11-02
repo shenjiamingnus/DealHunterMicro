@@ -176,5 +176,21 @@ class ProductControllerTest {
         Assertions.assertEquals(product1, result.getBody());
     }
 
+  @Test
+  void testAddUserWatchesProduct() {
+    Assertions.assertEquals(HttpStatus.OK, productController.addUserWatchesProduct(1L, 1L).getStatusCode());
+  }
+
+  @Test
+  void testRemoveUserWatchesProduct() {
+    Assertions.assertEquals(HttpStatus.OK, productController.removeUserWatchesProduct(1L, 1L).getStatusCode());
+  }
+
+  @Test
+  void testIsUserWatchingProduct() {
+    when(productService.isUserWatchingProduct(1L, 1L)).thenReturn(true);
+    Assertions.assertTrue(productController.isUserWatchingProduct(1L, 1L).getBody());
+  }
+
 }
 
