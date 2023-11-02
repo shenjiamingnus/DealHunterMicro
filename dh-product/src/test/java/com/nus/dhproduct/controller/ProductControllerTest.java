@@ -42,7 +42,6 @@ class ProductControllerTest {
 
     @Test
     void testGetAllProducts() {
-
         Product product1 = new Product();
         product1.setProductName("productname1");
         product1.setBrandName("brandname1");
