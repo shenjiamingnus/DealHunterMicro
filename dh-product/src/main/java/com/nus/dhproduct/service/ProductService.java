@@ -102,7 +102,6 @@ public class ProductService {
         newPriceHistory.setCreateDate(Instant.now());
         newPriceHistory.setPrice(credatedProduct.getCurrentPrice());
         priceHistoryRepository.save(newPriceHistory);
-
         return credatedProduct;
     }
 
