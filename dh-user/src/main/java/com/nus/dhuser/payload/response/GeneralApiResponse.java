@@ -17,4 +17,5 @@ public class GeneralApiResponse {
     this.success = success;
     this.message = message;
   }
+
 }
