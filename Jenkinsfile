@@ -48,7 +48,7 @@ pipeline {
 
       stage ('build & push') {
            when{
-             anyOf { branch 'Release'; branch 'master' }
+             anyOf { branch 'Release'; branch 'main' }
            }
           steps {
               container ('maven') {
@@ -72,7 +72,7 @@ pipeline {
 
       stage('deploy to dev') {
         when{
-           anyOf { branch 'Release'; branch 'master' }
+           anyOf { branch 'Release'; branch 'main' }
         }
         steps {
           container ('maven') {
@@ -93,7 +93,7 @@ pipeline {
 
       stage('push latest'){
          when{
-           branch 'master'
+           branch 'main'
          }
          steps{
             container ('maven') {
@@ -113,7 +113,7 @@ pipeline {
 
       stage('deploy to production') {
         when{
-          anyOf {  branch 'master' }
+          anyOf {  branch 'main' }
         }
         steps {
           input(id: 'deploy-to-production', message: 'deploy to production?',  submitter: 'project-admin,admin')
