@@ -26,5 +26,4 @@ public class ImgController {
     }
     return ResponseEntity.ok(new GeneralApiResponse(false, "Upload Failed."));
   }
-
 }
