@@ -48,7 +48,7 @@ pipeline {
 
       stage ('build & push') {
            when{
-             branch 'main'
+             anyOf { branch 'Release'; branch 'master' }
            }
           steps {
               container ('maven') {
@@ -70,29 +70,9 @@ pipeline {
           }
       }
 
-      stage('push latest'){
-         when{
-           branch 'main'
-         }
-         steps{
-              container ('maven') {
-                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
-                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
-                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                  sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
-                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
-                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
-                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
-                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
-                  sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
-              }
-         }
-      }
-
       stage('deploy to dev') {
         when{
-          branch 'main'
+           anyOf { branch 'Release'; branch 'master' }
         }
         steps {
           container ('maven') {
@@ -106,6 +86,48 @@ pipeline {
               sh 'envsubst < dh-email/deploy/dh-email-deploy.yaml | kubectl apply -f -'
               sh 'envsubst < dh-product/deploy/dh-product-deploy.yaml | kubectl apply -f -'
               sh 'envsubst < dh-gateway/deploy/dh-gateway-deploy.yaml | kubectl apply -f -'
+            }
+          }
+        }
+      }
+
+      stage('push latest'){
+         when{
+           branch 'master'
+         }
+         steps{
+            container ('maven') {
+              sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+              sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+              sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+              sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+              sh 'podman tag  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:SNAPSHOT-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+              sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-brand:latest '
+              sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-email:latest '
+              sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-product:latest '
+              sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-gateway:latest '
+              sh 'podman push  $REGISTRY/$DOCKERHUB_NAMESPACE/dh-user:latest '
+            }
+         }
+      }
+
+      stage('deploy to production') {
+        when{
+          anyOf {  branch 'master' }
+        }
+        steps {
+          input(id: 'deploy-to-production', message: 'deploy to production?',  submitter: 'project-admin,admin')
+          container("maven") {
+            withCredentials([
+                    kubeconfigFile(
+                            credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
+                            variable: 'KUBECONFIG')
+            ]) {
+              sh 'envsubst < dh-brand/deploy/dh-brand-prod.yaml | kubectl apply -f -'
+              sh 'envsubst < dh-user/deploy/dh-user-prod.yaml | kubectl apply -f -'
+              sh 'envsubst < dh-email/deploy/dh-email-prod.yaml | kubectl apply -f -'
+              sh 'envsubst < dh-product/deploy/dh-product-prod.yaml | kubectl apply -f -'
+              sh 'envsubst < dh-gateway/deploy/dh-gateway-prod.yaml | kubectl apply -f -'
             }
           }
         }
