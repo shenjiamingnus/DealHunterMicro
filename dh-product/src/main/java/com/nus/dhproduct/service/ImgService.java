@@ -23,6 +23,7 @@ public class ImgService {
   @Value("${minio.end_point}")
   public String endPoint;
 
+
   public String uploadImage(MultipartFile file) {
     String objectName = UUID.randomUUID().toString();
     try {
