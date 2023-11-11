@@ -139,4 +139,5 @@ public class UserService {
   public List<User> getUsersByIds(List<Long> userIds) {
     return userRepository.findAllById(userIds);
   }
+
 }
