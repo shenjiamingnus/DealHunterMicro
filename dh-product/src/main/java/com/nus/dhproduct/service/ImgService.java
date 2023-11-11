@@ -43,5 +43,4 @@ public class ImgService {
     }
     return endPoint + "/" + bucket + "/" + objectName + ".png";
   }
-
 }
