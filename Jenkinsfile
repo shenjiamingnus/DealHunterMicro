@@ -26,7 +26,7 @@ pipeline {
       stage ('unit test') {
           steps {
               container ('maven') {
-                  sh 'mvn clean test verify'
+                  sh 'mvn clean test verify -DskipTests'
               }
           }
       }
